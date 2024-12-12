@@ -5,8 +5,8 @@ public class Donor extends User {
 
     public Donor() {}  // Firestore requires a no-argument constructor
 
-    public Donor(String name, String username, String email, String BloodType) {
-        super(name, username, email);
+    public Donor(String username, String email, String BloodType) {
+        super(username, email);
         this.BloodType = BloodType;
     }
 

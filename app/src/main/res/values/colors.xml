@@ -1,10 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="purple_200">#BB86FC</color>
+    <color name="purple_500">#6200EE</color>
+    <color name="purple_700">#3700B3</color>
+    <color name="teal_200">#03DAC5</color>
+    <color name="teal_700">#018786</color>
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="primary">#D72638</color>
+    <color name="primary_dark">#9B1C31</color>
+    <color name="background">#FFFFFFFF</color>
+    <color name="surface">#B3B3B3</color>
+    <color name="accent">#2D9CDB</color>
+    <color name="secondary">#1E4E8C</color>
+    <color name="success">#27AE60</color>
+    <color name="warning">#F2994A</color>
+    <color name="neutral">#FAFAFA</color>
+    <color name="border">#D1D5DB</color>
+    <!-- Primary Text Color -->
+    <color name="primary_text_color">#0D0D0D</color>
+
+    <!-- Accent Text Color -->
+    <color name="accent_text_color">#007EA7</color>
+
+    <!-- Button or Action Text Color -->
+    <color name="action_text_color">#E63946</color>
+
+    <!-- Secondary Text Color -->
+    <color name="secondary_text_color">#6C757D</color>
 </resources>
