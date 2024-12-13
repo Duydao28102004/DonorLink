@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:backgroundTint="@android:color/white">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingEnd="16dp">
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/siteName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Donation Site Name"
+                android:textSize="18sp"
+                android:textColor="#333333"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp"/>
+            <TextView
+                android:id="@+id/siteAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Site Address"
+                android:textSize="14sp"
+                android:textColor="#666666"
+                android:layout_marginBottom="8dp"/>
+            <TextView
+                android:id="@+id/donationHours"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Donation Hours: 9 AM - 5 PM"
+                android:textSize="14sp"
+                android:textColor="#666666"/>
+        </LinearLayout>
+        <ImageView
+            android:id="@+id/siteImage"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/donation_site"
+            android:layout_gravity="center_vertical"
+            android:contentDescription="Donation Site Image"/>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

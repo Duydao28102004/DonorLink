@@ -1,5 +1,6 @@
 package com.example.donorlink;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,6 +13,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatSpinner;
 import androidx.appcompat.widget.SwitchCompat;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.example.donorlink.model.BloodDonationSiteManager;
 import com.example.donorlink.model.DonationSite;
@@ -35,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
         firestoreRepository = new FirestoreRepository();
         // remove the top bar
         getSupportActionBar().hide();
-
         setLoginView();
     }
 
@@ -120,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
                         firestoreRepository.addDonor(donor);
                     }
 
-                    // Navigate to home activity or next screen
+                    // Navigate to home activity
                     setLoginView();
                 }
 
@@ -169,7 +171,34 @@ public class MainActivity extends AppCompatActivity {
                 public void onSuccess(FirebaseUser user) {
                     showLoading(false);
                     Toast.makeText(MainActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
-                    // Navigate to home activity or next screen
+                    // Now fetch donor and manager data asynchronously
+                    firestoreRepository.fetchDonors().observe(MainActivity.this, donors -> {
+                        if (donors != null) {
+                            for (Donor donor : donors) {
+                                if (donor.getEmail().equals(user.getEmail())) {
+                                    // Navigate to donor activity
+                                    Intent intent = new Intent(MainActivity.this, DonorActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                    return;  // No need to check managers
+                                }
+                            }
+                        }
+                    });
+
+//                    firestoreRepository.fetchBloodDonationSiteManagers().observe(MainActivity.this, managers -> {
+//                        if (managers != null) {
+//                            for (BloodDonationSiteManager manager : managers) {
+//                                if (manager.getEmail().equals(user.getEmail())) {
+//                                    // Navigate to manager activity
+//                                    Intent intent = new Intent(MainActivity.this, ManagerActivity.class);
+//                                    startActivity(intent);
+//                                    finish();
+//                                    return;  // No need to check donors
+//                                }
+//                            }
+//                        }
+//                    });
                 }
 
                 @Override
