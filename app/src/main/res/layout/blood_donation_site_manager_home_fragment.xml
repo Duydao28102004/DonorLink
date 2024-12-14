@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:paddingTop="30dp"
-    android:paddingHorizontal="10dp">
-
+    android:paddingHorizontal="10dp">>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -37,7 +36,8 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:src="@drawable/ic_notification"
-                android:layout_gravity="center"/>
+                android:layout_gravity="center"
+                app:tint="@color/white"/>
         </FrameLayout>
         <LinearLayout
             android:layout_width="fill_parent"
@@ -63,81 +63,62 @@
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="15dp">
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/searchBar"
-            android:layout_width="350dp"
-            android:layout_height="50dp"
-            android:hint="Search donation site..."
-            android:inputType="text" />
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/ic_search"/>
-    </LinearLayout>
-    <RelativeLayout
-        android:layout_marginTop="15dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/rectangle_shape"
-        android:padding="16dp">
-
-        <TextView
-            android:id="@+id/tvDonorName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Congratulations, Angela!"
-            android:textSize="20sp"
-            android:textColor="#000"
-            android:textStyle="bold"/>
-
-        <TextView
-            android:id="@+id/tvDonationSites"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tvDonorName"
-            android:layout_marginTop="8dp"
-            android:text="You have donated to 3 Sites"
-            android:textSize="16sp"
-            android:textColor="#555"/>
-        <TextView
-            android:id="@+id/tvSeeAllDonationSites"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tvDonationSites"
-            android:layout_marginTop="8dp"
-            android:text="See all >>"
-            android:textSize="16sp"
-            android:textColor="#555"/>
-
-        <ImageView
-            android:id="@+id/ivDonationIndicator"
-            android:layout_width="75dp"
-            android:layout_height="75dp"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:src="@drawable/ic_smile"/>
-
-    </RelativeLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:layout_marginTop="15dp">
-        <TextView
-            android:id="@+id/myDonationSite"
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Explore Donation Sites"
-            android:textSize="16sp"
-            android:textColor="#333333"
-            android:textStyle="bold"
-            android:layout_marginBottom="16dp"/>
+            android:orientation="horizontal"
+            android:layoutDirection="rtl">
+
+            <FrameLayout
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="10dp">
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/circle_shape"
+                    app:tint="@color/accent" />
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:src="@drawable/ic_add"
+                    android:layout_gravity="center"
+                    app:tint="@color/white"/>
+            </FrameLayout>
+            <TextView
+                android:id="@+id/myDonationSite"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="16dp"
+                android:text="My Donation Sites"
+                android:textColor="#333333"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                />
+        </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewDonationSites"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"/>
+
+        <TextView
+            android:id="@+id/volunteerDonationSites"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="Volunteer Donation Sites"
+            android:textColor="#333333"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewVolunteerDonationSites"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
     </LinearLayout>

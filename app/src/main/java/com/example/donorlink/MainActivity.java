@@ -49,6 +49,12 @@ public class MainActivity extends AppCompatActivity {
         TextInputEditText emailInput = findViewById(R.id.emailInputText);
         TextInputEditText passwordInput = findViewById(R.id.passwordInputText);
         TextInputEditText reEnterPasswordInput = findViewById(R.id.repasswordInputText);
+        TextView signInTextView = findViewById(R.id.signInTextView);
+
+        // Set up the onClickListener for the signUpTextView
+        signInTextView.setOnClickListener(v -> {
+            setLoginView();
+        });
 
         // Get the user type switch
         SwitchCompat userTypeSwitch = findViewById(R.id.roleSwitch);
@@ -186,19 +192,19 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
 
-//                    firestoreRepository.fetchBloodDonationSiteManagers().observe(MainActivity.this, managers -> {
-//                        if (managers != null) {
-//                            for (BloodDonationSiteManager manager : managers) {
-//                                if (manager.getEmail().equals(user.getEmail())) {
-//                                    // Navigate to manager activity
-//                                    Intent intent = new Intent(MainActivity.this, ManagerActivity.class);
-//                                    startActivity(intent);
-//                                    finish();
-//                                    return;  // No need to check donors
-//                                }
-//                            }
-//                        }
-//                    });
+                    firestoreRepository.fetchBloodDonationSiteManagers().observe(MainActivity.this, managers -> {
+                        if (managers != null) {
+                            for (BloodDonationSiteManager manager : managers) {
+                                if (manager.getEmail().equals(user.getEmail())) {
+                                    // Navigate to manager activity
+                                    Intent intent = new Intent(MainActivity.this, BloodDonationSiteManagerActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                    return;  // No need to check donors
+                                }
+                            }
+                        }
+                    });
                 }
 
                 @Override

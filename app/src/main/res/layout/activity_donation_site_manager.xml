@@ -14,6 +14,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        app:menu="@menu/donor_bottom_navigation_menu"/>
+        app:menu="@menu/blood_donation_site_manager_navigation_menu"/>
 
 </RelativeLayout>

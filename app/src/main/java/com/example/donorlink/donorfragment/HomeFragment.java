@@ -4,14 +4,18 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.donorlink.DonationSiteAdapter;
 import com.example.donorlink.FirestoreRepository;
 import com.example.donorlink.R;
+import com.example.donorlink.sampleData;
 import com.example.donorlink.model.DonationSite;
 import com.example.donorlink.model.Donor;
 
@@ -50,11 +54,12 @@ public class HomeFragment extends Fragment {
         });
 
         // Fetch donation sites list and observe changes
-        firestoreRepository.fetchDonationSites().observe(this, donationSites -> {
-            if (donationSites != null) {
-                donationSiteLiveData.setValue(donationSites);
-            }
-        });
+//        firestoreRepository.fetchDonationSites().observe(this, donationSites -> {
+//            if (donationSites != null) {
+//                donationSiteLiveData.setValue(donationSites);
+//            }
+//        });
+        donationSiteLiveData.setValue(sampleData.getSampleDonationSites());
     }
 
     @Override
@@ -62,10 +67,18 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.donor_home_fragment, container, false);
 
-        // Get donor header name and registered donor site session
+        // Get references to the views
         TextView donorNameHeader = view.findViewById(R.id.donorNameHeader);
         TextView donorName = view.findViewById(R.id.tvDonorName);
         TextView donationSite = view.findViewById(R.id.tvDonationSites);
+        RecyclerView recyclerView = view.findViewById(R.id.recyclerViewDonationSites);
+
+        // Set up RecyclerView
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        // Set up the adapter
+        DonationSiteAdapter donationSiteAdapter = new DonationSiteAdapter(donationSiteLiveData.getValue());
+        recyclerView.setAdapter(donationSiteAdapter);
 
         // Observe the donorLiveData and update the UI when the donor is set
         donorLiveData.observe(getViewLifecycleOwner(), donor -> {
@@ -76,7 +89,7 @@ public class HomeFragment extends Fragment {
                 // Observe donation sites once donor data is available
                 donationSiteLiveData.observe(getViewLifecycleOwner(), donationSites -> {
                     if (donationSites != null) {
-                        int counter = 0; // Reset counter here
+                        int counter = 0;
 
                         for (DonationSite site : donationSites) {
                             if (site.getDonors().contains(donor)) {
@@ -94,6 +107,8 @@ public class HomeFragment extends Fragment {
                 });
             }
         });
+
+
 
         return view;
     }

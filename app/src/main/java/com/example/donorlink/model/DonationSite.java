@@ -7,13 +7,14 @@ public class DonationSite {
     private String address;
     private String donationHours;
     private String donorSiteImage;
+    private String description;
     private List<String> bloodType;
     private List<Donor> donors;
     private List<BloodDonationSiteManager> volunteers;
 
     public DonationSite() {}  // Firestore requires a no-argument constructor
 
-    public DonationSite(String name, String address, String donationHours,String donorSiteImage, List<String> bloodType, List<Donor> donors, List<BloodDonationSiteManager> volunteers) {
+    public DonationSite(String name, String address, String donationHours,String donorSiteImage, String description,List<String> bloodType, List<Donor> donors, List<BloodDonationSiteManager> volunteers) {
         this.name = name;
         this.address = address;
         this.donationHours = donationHours;
@@ -49,6 +50,14 @@ public class DonationSite {
 
     public void setDonorSiteImage(String donorSiteImage) {
         this.donorSiteImage = donorSiteImage;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public void setDonationHours(String donationHours) {
