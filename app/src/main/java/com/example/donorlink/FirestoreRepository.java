@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.donorlink.model.BloodDonationSiteManager;
+import com.example.donorlink.model.DonationSite;
 import com.example.donorlink.model.Donor;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -161,5 +162,76 @@ public class FirestoreRepository {
                 .delete()
                 .addOnSuccessListener(aVoid -> Log.d("Firestore", "Blood Donation Site Manager deleted successfully"))
                 .addOnFailureListener(e -> Log.e("Firestore", "Error deleting Blood Donation Site Manager", e));
+    }
+
+    // Add Donation Site
+    public void addDonationSite(DonationSite donationSite) {
+        // Use the name as the document ID to enforce uniqueness
+        db.collection("donationSites").document(donationSite.getName()).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        Log.e("Firestore", "Donation Site with this name already exists");
+                    } else {
+                        // Add the Donation Site if the name doesn't exist
+                        db.collection("donationSites").document(donationSite.getName())
+                                .set(donationSite)
+                                .addOnSuccessListener(aVoid -> Log.d("Firestore", "Donation Site added successfully"))
+                                .addOnFailureListener(e -> Log.e("Firestore", "Error adding Donation Site", e));
+                    }
+                })
+                .addOnFailureListener(e -> Log.e("Firestore", "Error checking for existing Donation Site", e));
+    }
+
+    // Fetch Donation Sites and return MutableLiveData
+    public LiveData<List<DonationSite>> fetchDonationSites() {
+        MutableLiveData<List<DonationSite>> donationSitesLiveData = new MutableLiveData<>();
+
+        db.collection("donationSites").get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    List<DonationSite> donationSites = new ArrayList<>();
+                    for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
+                        DonationSite donationSite = document.toObject(DonationSite.class);
+                        if (donationSite != null) {
+                            donationSites.add(donationSite);
+                        }
+                    }
+                    donationSitesLiveData.setValue(donationSites);  // Set the fetched data to LiveData
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("Firestore", "Error fetching Donation Sites", e);
+                    donationSitesLiveData.setValue(null);  // Optionally set null or handle error state
+                });
+
+        return donationSitesLiveData;
+    }
+
+    // Update Donation Site
+    public void updateDonationSite(DonationSite donationSite) {
+        db.collection("donationSites")
+                .whereEqualTo("name", donationSite.getName())
+                .get()
+                .addOnSuccessListener(querySnapshot -> {
+                    if (!querySnapshot.isEmpty()) {
+                        // Loop through the matching documents and update them
+                        for (DocumentSnapshot document : querySnapshot.getDocuments()) {
+                            document.getReference()
+                                    .set(donationSite)  // Set the updated Donation Site data
+                                    .addOnSuccessListener(aVoid -> Log.d("Firestore", "Donation Site updated successfully"))
+                                    .addOnFailureListener(e -> Log.e("Firestore", "Error updating Donation Site", e));
+                        }
+                    } else {
+                        Log.e("Firestore", "No Donation Site found with the given name");
+                    }
+                })
+                .addOnFailureListener(e -> Log.e("Firestore", "Error finding Donation Site", e));
+    }
+
+    // Delete Donation Site
+    public void deleteDonationSite(String name) {
+        db.collection("donationSites")
+                .document(name)
+                .delete()
+                .addOnSuccessListener(aVoid -> Log.d("Firestore", "Donation Site deleted successfully"))
+                .addOnFailureListener(e -> Log.e("Firestore", "Error deleting Donation Site", e));
     }
 }

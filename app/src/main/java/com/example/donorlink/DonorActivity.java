@@ -16,6 +16,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 public class DonorActivity extends AppCompatActivity {
     private FirestoreRepository firestoreRepository;
     private AuthenticationRepository authenticationRepository;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,20 +27,21 @@ public class DonorActivity extends AppCompatActivity {
         firestoreRepository = new FirestoreRepository();
         authenticationRepository = new AuthenticationRepository();
 
-        Log.d("DonorActivity", "User signed in: " + authenticationRepository.getCurrentUser().getEmail());
+
+        // Create a Bundle with the email argument
+        Bundle args = new Bundle();
+        String email = authenticationRepository.getCurrentUser().getEmail();
+        args.putString("email", email);
+
+        // Load the initial HomeFragment with the arguments
+        if (savedInstanceState == null) {
+            HomeFragment homeFragment = new HomeFragment();
+            homeFragment.setArguments(args);
+            loadFragment(homeFragment);
+        }
+
         // Initialize the BottomNavigationView
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-
-        // Create a new MenuFragment and set the username as an argument
-        HomeFragment homeFragment = new HomeFragment();
-        Bundle args = new Bundle();
-        args.putString("email", authenticationRepository.getCurrentUser().getEmail());
-
-
-        // Set up fragment transaction
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, homeFragment)
-                .commit();
 
         // Set up the BottomNavigationView to switch between fragments
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
@@ -53,16 +55,22 @@ public class DonorActivity extends AppCompatActivity {
 //                selectedFragment = new MapFragment();
             } else if (itemId == R.id.nav_profile) {
 //                selectedFragment = new ProfileFragment();
-            }else {
+            } else {
                 return false;
             }
-            if (selectedFragment != null) {
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, selectedFragment)
-                        .commit();
-            }
-            return true;
+
+            return loadFragment(selectedFragment);
         });
     }
 
+    // Helper method to load fragments
+    private boolean loadFragment(Fragment fragment) {
+        if (fragment != null) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, fragment)
+                    .commit();
+            return true;
+        }
+        return false;
+    }
 }

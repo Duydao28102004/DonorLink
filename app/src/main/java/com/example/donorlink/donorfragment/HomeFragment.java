@@ -3,64 +3,98 @@ package com.example.donorlink.donorfragment;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.example.donorlink.FirestoreRepository;
 import com.example.donorlink.R;
+import com.example.donorlink.model.DonationSite;
+import com.example.donorlink.model.Donor;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link HomeFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class HomeFragment extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private String email;
+    private FirestoreRepository firestoreRepository;
+    private MutableLiveData<Donor> donorLiveData = new MutableLiveData<>();
+    private MutableLiveData<List<DonationSite>> donationSiteLiveData = new MutableLiveData<>();
 
     public HomeFragment() {
         // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment BlankFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static HomeFragment newInstance(String param1, String param2) {
-        HomeFragment fragment = new HomeFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            email = getArguments().getString("email");
         }
+
+        firestoreRepository = new FirestoreRepository();
+
+        // Fetch donors and observe changes
+        firestoreRepository.fetchDonors().observe(this, donors -> {
+            if (donors != null) {
+                for (Donor donor : donors) {
+                    if (donor.getEmail().equals(email)) {
+                        donorLiveData.setValue(donor);
+                        break;
+                    }
+                }
+            }
+        });
+
+        // Fetch donation sites list and observe changes
+        firestoreRepository.fetchDonationSites().observe(this, donationSites -> {
+            if (donationSites != null) {
+                donationSiteLiveData.setValue(donationSites);
+            }
+        });
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.donor_home_fragment, container, false);
+        View view = inflater.inflate(R.layout.donor_home_fragment, container, false);
+
+        // Get donor header name and registered donor site session
+        TextView donorNameHeader = view.findViewById(R.id.donorNameHeader);
+        TextView donorName = view.findViewById(R.id.tvDonorName);
+        TextView donationSite = view.findViewById(R.id.tvDonationSites);
+
+        // Observe the donorLiveData and update the UI when the donor is set
+        donorLiveData.observe(getViewLifecycleOwner(), donor -> {
+            if (donor != null) {
+                donorNameHeader.setText(donor.getUsername() + "!");
+                donorName.setText("Let's start, " + donor.getUsername());
+
+                // Observe donation sites once donor data is available
+                donationSiteLiveData.observe(getViewLifecycleOwner(), donationSites -> {
+                    if (donationSites != null) {
+                        int counter = 0; // Reset counter here
+
+                        for (DonationSite site : donationSites) {
+                            if (site.getDonors().contains(donor)) {
+                                counter++;
+                            }
+                        }
+
+                        if (counter == 0) {
+                            donationSite.setText("You have donated to 0 sites");
+                        } else {
+                            donorName.setText("Welcome, " + donor.getUsername());
+                            donationSite.setText("You have donated to " + counter + " sites");
+                        }
+                    }
+                });
+            }
+        });
+
+        return view;
     }
 }
