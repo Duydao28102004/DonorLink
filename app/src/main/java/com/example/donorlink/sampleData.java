@@ -1,5 +1,7 @@
 package com.example.donorlink;
 
+import androidx.lifecycle.MutableLiveData;
+
 import com.example.donorlink.model.DonationSite;
 import com.example.donorlink.model.Donor;
 import com.example.donorlink.model.BloodDonationSiteManager;
@@ -16,8 +18,8 @@ public class sampleData {
         Donor donor2 = new Donor("donor2", "donor2@example.com", "A+");
 
         // Create sample volunteers
-        BloodDonationSiteManager volunteer1 = new BloodDonationSiteManager("Volunteer 1", "volunteer1@example.com", new ArrayList<>());
-        BloodDonationSiteManager volunteer2 = new BloodDonationSiteManager("Volunteer 2", "volunteer2@example.com", new ArrayList<>());
+        BloodDonationSiteManager volunteer2 = new BloodDonationSiteManager("Duy Manager", "duybaodao28102004@gmail.com", new ArrayList<>());
+        BloodDonationSiteManager volunteer1 = new BloodDonationSiteManager("Volunteer 2", "volunteer2@example.com", new ArrayList<>());
 
         // Create the list of blood types
         List<String> bloodTypes = Arrays.asList("O+", "A+", "B+", "AB+");

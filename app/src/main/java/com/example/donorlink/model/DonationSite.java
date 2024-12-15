@@ -19,6 +19,7 @@ public class DonationSite {
         this.address = address;
         this.donationHours = donationHours;
         this.donorSiteImage = donorSiteImage;
+        this.description = description;
         this.bloodType = bloodType;
         this.donors = donors;
         this.volunteers = volunteers;

@@ -1,72 +1,16 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:paddingTop="30dp"
-    android:paddingHorizontal="10dp">>
+    android:paddingHorizontal="10dp">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layoutDirection="rtl">
+        android:orientation="vertical">
 
-        <FrameLayout
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginEnd="15dp">
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/ic_profile"
-                android:background="@drawable/rounded_image"
-                android:layout_gravity="center"/>
-        </FrameLayout>
-
-        <FrameLayout
-            android:layout_width="50dp"
-            android:layout_height="50dp">
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/circle_shape"
-                app:tint="@color/secondary" />
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/ic_notification"
-                android:layout_gravity="center"
-                app:tint="@color/white"/>
-        </FrameLayout>
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:orientation="vertical"
-            android:layoutDirection="ltr">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Welcome home,"
-                android:textColor="#888888"
-                android:textSize="16sp"/>
-
-            <TextView
-                android:id="@+id/donorNameHeader"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Angela!"
-                android:textColor="#1B1B1B"
-                android:textSize="20sp"
-                android:textStyle="bold"/>
-        </LinearLayout>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_marginTop="15dp">
-
+        <!-- Top Section with Manager Info -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -74,6 +18,80 @@
             android:layoutDirection="rtl">
 
             <FrameLayout
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginEnd="15dp">
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_profile"
+                    android:background="@drawable/rounded_image"
+                    android:layout_gravity="center"/>
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="50dp"
+                android:layout_height="50dp">
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/circle_shape"
+                    app:tint="@color/secondary" />
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_notification"
+                    android:layout_gravity="center"
+                    app:tint="@color/white"/>
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layoutDirection="ltr">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Welcome home,"
+                    android:textColor="#888888"
+                    android:textSize="16sp"/>
+
+                <TextView
+                    android:id="@+id/donationManagerNameHeader"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Angela!"
+                    android:textColor="#1B1B1B"
+                    android:textSize="20sp"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Filter Buttons Section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="15dp">
+
+            <Button
+                android:id="@+id/buttonOwnSites"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:text="My Donation Sites"/>
+
+            <Button
+                android:id="@+id/buttonVolunteerSites"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:layout_marginStart="10dp"
+                android:text="Volunteer Sites"/>
+            <FrameLayout
+                android:id="@+id/buttonFrameLayout"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginStart="10dp">
@@ -89,37 +107,16 @@
                     android:layout_gravity="center"
                     app:tint="@color/white"/>
             </FrameLayout>
-            <TextView
-                android:id="@+id/myDonationSite"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="16dp"
-                android:text="My Donation Sites"
-                android:textColor="#333333"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                />
         </LinearLayout>
 
+        <!-- RecyclerView for Filtered Sites -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewDonationSites"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"/>
+            android:nestedScrollingEnabled="false"
+            android:layout_marginTop="10dp"/>
 
-        <TextView
-            android:id="@+id/volunteerDonationSites"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:text="Volunteer Donation Sites"
-            android:textColor="#333333"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerViewVolunteerDonationSites"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
     </LinearLayout>
-</LinearLayout>
+
+</androidx.core.widget.NestedScrollView>
