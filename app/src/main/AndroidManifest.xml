@@ -16,10 +16,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DonorLink"
         tools:targetApi="31">
+        <activity
+            android:name=".AddDonationSiteActivity"
+            android:exported="false" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyDUr1ZHMmpsParvmtpv1rXEvuFDsqHDL3E" />
+            android:value="AIzaSyAmYG0ewlmb4zaJAkC6pBsFjqi0NBQu-Po" />
+
         <activity
             android:name=".BloodDonationSiteManagerActivity"
             android:exported="false" />

@@ -60,7 +60,7 @@ public class HomeFragment extends Fragment {
 //                donationSiteLiveData.setValue(donationSites);
 //            }
 //        });
-        donationSiteLiveData.setValue(sampleData.getSampleDonationSites());
+        donationSiteLiveData.setValue(sampleData.generateTestDonationSite());
     }
 
     @Override

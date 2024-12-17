@@ -1,10 +1,8 @@
 package com.example.donorlink;
 
-import androidx.lifecycle.MutableLiveData;
-
+import com.example.donorlink.model.BloodDonationSiteManager;
 import com.example.donorlink.model.DonationSite;
 import com.example.donorlink.model.Donor;
-import com.example.donorlink.model.BloodDonationSiteManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,176 +10,66 @@ import java.util.List;
 
 public class sampleData {
 
-    public static List<DonationSite> getSampleDonationSites() {
-        // Create sample donors
-        Donor donor1 = new Donor("donor1", "donor1@example.com", "O+");
-        Donor donor2 = new Donor("donor2", "donor2@example.com", "A+");
-
-        // Create sample volunteers
-        BloodDonationSiteManager volunteer2 = new BloodDonationSiteManager("Duy Manager", "duybaodao28102004@gmail.com", new ArrayList<>());
-        BloodDonationSiteManager volunteer1 = new BloodDonationSiteManager("Volunteer 2", "volunteer2@example.com", new ArrayList<>());
-
-        // Create the list of blood types
-        List<String> bloodTypes = Arrays.asList("O+", "A+", "B+", "AB+");
-
-        // Create the list of donation sites
+    public static List<DonationSite> generateTestDonationSite() {
         List<DonationSite> donationSites = new ArrayList<>();
+        // Test data for donors
+        List<Donor> donors = new ArrayList<>();
+        donors.add(new Donor("John Doe", "john.doe@example.com", "A+"));
+        donors.add(new Donor("Jane Smith", "jane.smith@example.com", "A-"));
 
-        // Add some sample donation sites
-        donationSites.add(new DonationSite(
-                "Central Blood Bank",
-                "123 Blood St, Blood City",
-                "9:00 AM - 5:00 PM",
-                "central_blood_bank_image_url",
-                "The central blood bank for the region.",
-                bloodTypes,
-                Arrays.asList(donor1, donor2),  // Add donors to this site
-                Arrays.asList(volunteer1, volunteer2)  // Add volunteers to this site
-        ));
+        // Test data for volunteers (BloodDonationSiteManager)
+        List<BloodDonationSiteManager> volunteers = new ArrayList<>();
+        volunteers.add(new BloodDonationSiteManager("Alice Manager", "alice.manager@example.com", new ArrayList<>()));
+        volunteers.add(new BloodDonationSiteManager("Bob Manager", "bob.manager@example.com", new ArrayList<>()));
 
-        donationSites.add(new DonationSite(
-                "Eastside Blood Drive",
-                "456 Donation Ave, East City",
-                "10:00 AM - 4:00 PM",
-                "eastside_blood_drive_image_url",
-                "Mobile blood donation drive in the east side.",
-                bloodTypes,
-                Arrays.asList(donor2),  // Add donor2 to this site
-                Arrays.asList(volunteer2)  // Add volunteer2 to this site
-        ));
+        // Blood types available at the site
+        List<String> bloodTypes = Arrays.asList("A+", "O+", "B-", "AB-");
 
-        donationSites.add(new DonationSite(
-                "Eastside Blood Drive",
-                "456 Donation Ave, East City",
-                "10:00 AM - 4:00 PM",
-                "eastside_blood_drive_image_url",
-                "Mobile blood donation drive in the east side.",
-                bloodTypes,
-                Arrays.asList(donor2),  // Add donor2 to this site
-                Arrays.asList(volunteer2)  // Add volunteer2 to this site
-        ));
+        // Create a DonationSite instance
+        DonationSite testSite = new DonationSite(
+                "Downtown Blood Donation Center",    // Name
+                "123 Main Street, City, Country",    // Address
+                "9:00 AM - 5:00 PM",                 // Donation Hours
+                "https://example.com/donation_site_image.jpg",  // Donor Site Image URL
+                "A community-driven blood donation site located in the heart of the city.",  // Description
+                101.345678,                          // Longitude
+                13.456789                            // Latitude
+        );
 
-        donationSites.add(new DonationSite(
-                "Eastside Blood Drive",
-                "456 Donation Ave, East City",
-                "10:00 AM - 4:00 PM",
-                "eastside_blood_drive_image_url",
-                "Mobile blood donation drive in the east side.",
-                bloodTypes,
-                Arrays.asList(donor2),  // Add donor2 to this site
-                Arrays.asList(volunteer2)  // Add volunteer2 to this site
-        ));
+        // Add sample donation sites to the list
+        donationSites.add(testSite);
 
-        donationSites.add(new DonationSite(
-                "Eastside Blood Drive",
-                "456 Donation Ave, East City",
-                "10:00 AM - 4:00 PM",
-                "eastside_blood_drive_image_url",
-                "Mobile blood donation drive in the east side.",
-                bloodTypes,
-                Arrays.asList(donor2),  // Add donor2 to this site
-                Arrays.asList(volunteer2)  // Add volunteer2 to this site
-        ));
-
-        donationSites.add(new DonationSite(
-                "Eastside Blood Drive",
-                "456 Donation Ave, East City",
-                "10:00 AM - 4:00 PM",
-                "eastside_blood_drive_image_url",
-                "Mobile blood donation drive in the east side.",
-                bloodTypes,
-                Arrays.asList(donor2),  // Add donor2 to this site
-                Arrays.asList(volunteer2)  // Add volunteer2 to this site
-        ));
-
-        donationSites.add(new DonationSite(
-                "Eastside Blood Drive",
-                "456 Donation Ave, East City",
-                "10:00 AM - 4:00 PM",
-                "eastside_blood_drive_image_url",
-                "Mobile blood donation drive in the east side.",
-                bloodTypes,
-                Arrays.asList(donor2),  // Add donor2 to this site
-                Arrays.asList(volunteer2)  // Add volunteer2 to this site
-        ));
-
-        donationSites.add(new DonationSite(
-                "Eastside Blood Drive",
-                "456 Donation Ave, East City",
-                "10:00 AM - 4:00 PM",
-                "eastside_blood_drive_image_url",
-                "Mobile blood donation drive in the east side.",
-                bloodTypes,
-                Arrays.asList(donor2),  // Add donor2 to this site
-                Arrays.asList(volunteer2)  // Add volunteer2 to this site
-        ));
-
-        donationSites.add(new DonationSite(
-                "Eastside Blood Drive",
-                "456 Donation Ave, East City",
-                "10:00 AM - 4:00 PM",
-                "eastside_blood_drive_image_url",
-                "Mobile blood donation drive in the east side.",
-                bloodTypes,
-                Arrays.asList(donor2),  // Add donor2 to this site
-                Arrays.asList(volunteer2)  // Add volunteer2 to this site
-        ));
-
-        donationSites.add(new DonationSite(
-                "Eastside Blood Drive",
-                "456 Donation Ave, East City",
-                "10:00 AM - 4:00 PM",
-                "eastside_blood_drive_image_url",
-                "Mobile blood donation drive in the east side.",
-                bloodTypes,
-                Arrays.asList(donor2),  // Add donor2 to this site
-                Arrays.asList(volunteer2)  // Add volunteer2 to this site
-        ));
-
-        donationSites.add(new DonationSite(
-                "Eastside Blood Drive",
-                "456 Donation Ave, East City",
-                "10:00 AM - 4:00 PM",
-                "eastside_blood_drive_image_url",
-                "Mobile blood donation drive in the east side.",
-                bloodTypes,
-                Arrays.asList(donor2),  // Add donor2 to this site
-                Arrays.asList(volunteer2)  // Add volunteer2 to this site
-        ));
-
-        donationSites.add(new DonationSite(
-                "Eastside Blood Drive",
-                "456 Donation Ave, East City",
-                "10:00 AM - 4:00 PM",
-                "eastside_blood_drive_image_url",
-                "Mobile blood donation drive in the east side.",
-                bloodTypes,
-                Arrays.asList(donor2),  // Add donor2 to this site
-                Arrays.asList(volunteer2)  // Add volunteer2 to this site
-        ));
-
-        donationSites.add(new DonationSite(
-                "Eastside Blood Drive",
-                "456 Donation Ave, East City",
-                "10:00 AM - 4:00 PM",
-                "eastside_blood_drive_image_url",
-                "Mobile blood donation drive in the east side.",
-                bloodTypes,
-                Arrays.asList(donor2),  // Add donor2 to this site
-                Arrays.asList(volunteer2)  // Add volunteer2 to this site
-        ));
-
-        donationSites.add(new DonationSite(
-                "Eastside Blood Drive",
-                "456 Donation Ave, East City",
-                "10:00 AM - 4:00 PM",
-                "eastside_blood_drive_image_url",
-                "Mobile blood donation drive in the east side.",
-                bloodTypes,
-                Arrays.asList(donor2),  // Add donor2 to this site
-                Arrays.asList(volunteer2)  // Add volunteer2 to this site
-        ));
+        // Assign the donors, volunteers, and blood types
+        testSite.setDonors(donors);
+        testSite.setVolunteers(volunteers);
+        testSite.setBloodType(bloodTypes);
 
         return donationSites;
+    }
+
+    public static void printTestDonationSite(DonationSite donationSite) {
+        System.out.println("=== Donation Site Test Data ===");
+        System.out.println("Name: " + donationSite.getName());
+        System.out.println("Address: " + donationSite.getAddress());
+        System.out.println("Operating Hours: " + donationSite.getDonationHours());
+        System.out.println("Description: " + donationSite.getDescription());
+        System.out.println("Latitude: " + donationSite.getLatitude());
+        System.out.println("Longitude: " + donationSite.getLongitude());
+        System.out.println("Image URL: " + donationSite.getDonorSiteImage());
+
+        System.out.println("\nAvailable Blood Types:");
+        for (String bloodType : donationSite.getBloodType()) {
+            System.out.println("- " + bloodType);
+        }
+
+        System.out.println("\nDonors:");
+        for (Donor donor : donationSite.getDonors()) {
+            System.out.println("- " + donor.getUsername() + " (" + donor.getBloodType() + ")");
+        }
+
+        System.out.println("\nVolunteers:");
+        for (BloodDonationSiteManager volunteer : donationSite.getVolunteers()) {
+            System.out.println("- " + volunteer.getUsername());
+        }
     }
 }

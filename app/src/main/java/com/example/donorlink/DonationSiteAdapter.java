@@ -32,6 +32,8 @@ public class DonationSiteAdapter extends RecyclerView.Adapter<DonationSiteAdapte
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         DonationSite site = donationSites.get(position);
         holder.siteNameTextView.setText(site.getName());
+        holder.siteAddressTextView.setText(site.getAddress());
+        holder.siteHoursTextView.setText("Donation Hours: " + site.getDonationHours());
     }
 
     @Override
@@ -47,10 +49,14 @@ public class DonationSiteAdapter extends RecyclerView.Adapter<DonationSiteAdapte
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView siteNameTextView;
+        TextView siteAddressTextView;
+        TextView siteHoursTextView;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            siteNameTextView = itemView.findViewById(R.id.siteName);
+            siteNameTextView = itemView.findViewById(R.id.name);
+            siteAddressTextView = itemView.findViewById(R.id.address);
+            siteHoursTextView = itemView.findViewById(R.id.donationHours);
         }
     }
 }
