@@ -11,6 +11,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.donorlink.donorfragment.HomeFragment;
+import com.example.donorlink.donorfragment.MapFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class DonorActivity extends AppCompatActivity {
@@ -52,7 +53,7 @@ public class DonorActivity extends AppCompatActivity {
                 selectedFragment = new HomeFragment();
                 selectedFragment.setArguments(args);
             } else if (itemId == R.id.nav_map) {
-//                selectedFragment = new MapFragment();
+                selectedFragment = new MapFragment();
             } else if (itemId == R.id.nav_profile) {
 //                selectedFragment = new ProfileFragment();
             } else {
