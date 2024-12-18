@@ -1,5 +1,6 @@
 package com.example.donorlink;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -136,8 +137,8 @@ public class AddDonationSiteActivity extends AppCompatActivity {
 
 
         Toast.makeText(this, "Donation Site Created Successfully", Toast.LENGTH_SHORT).show();
-
-        // Optionally, finish the activity or redirect the user
+        Intent resultIntent = new Intent();
+        setResult(Activity.RESULT_OK, resultIntent);
         finish();
     }
 }

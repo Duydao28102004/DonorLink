@@ -1,8 +1,11 @@
 package com.example.donorlink.blooddonationsitemanagerfragment;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -34,8 +37,17 @@ public class HomeFragment extends Fragment {
     private MutableLiveData<List<DonationSite>> donationSiteLiveData = new MutableLiveData<>();
     private List<DonationSite> allDonationSites = new ArrayList<>();
     private DonationSiteAdapter adapter;
-    private boolean isOwnSitesSelected = false;
+    private boolean isOwnSitesSelected = true;
     private boolean isVolunteerSitesSelected = false;
+
+    // ActivityResultLauncher to handle the result
+    private final ActivityResultLauncher<Intent> addSiteLauncher =
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    // Refresh data after returning from AddDonationSiteActivity
+                    refreshData();
+                }
+            });
 
     public HomeFragment() {
         // Required empty public constructor
@@ -68,7 +80,6 @@ public class HomeFragment extends Fragment {
                 donationSiteLiveData.setValue(donationSites);
             }
         });
-
     }
 
     @Override
@@ -81,23 +92,20 @@ public class HomeFragment extends Fragment {
         adapter = new DonationSiteAdapter(new ArrayList<>());
         recyclerView.setAdapter(adapter);
 
-        // Get the plus button frame layout
+        // Plus button to add a new donation site
         FrameLayout plusButtonFrameLayout = view.findViewById(R.id.buttonFrameLayout);
         plusButtonFrameLayout.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), AddDonationSiteActivity.class);
-            startActivity(intent);
+            addSiteLauncher.launch(intent); // Launch the AddDonationSiteActivity for a result
         });
-
 
         // Initialize Buttons
         Button buttonOwnSites = view.findViewById(R.id.buttonOwnSites);
         Button buttonVolunteerSites = view.findViewById(R.id.buttonVolunteerSites);
 
-        // First the buttonOwn is selected
+        // Set default selection
         isOwnSitesSelected = true;
         isVolunteerSitesSelected = false;
-
-        // Initially set the button styles based on the selection
         updateButtonStyles(buttonOwnSites, buttonVolunteerSites);
 
         // Button click listeners to filter the data
@@ -105,14 +113,14 @@ public class HomeFragment extends Fragment {
             isOwnSitesSelected = true;
             isVolunteerSitesSelected = false;
             filterData();
-            updateButtonStyles(buttonOwnSites, buttonVolunteerSites); // Update button styles
+            updateButtonStyles(buttonOwnSites, buttonVolunteerSites);
         });
 
         buttonVolunteerSites.setOnClickListener(v -> {
             isOwnSitesSelected = false;
             isVolunteerSitesSelected = true;
             filterData();
-            updateButtonStyles(buttonOwnSites, buttonVolunteerSites); // Update button styles
+            updateButtonStyles(buttonOwnSites, buttonVolunteerSites);
         });
 
         bloodDonationSiteManagerLiveData.observe(getViewLifecycleOwner(), manager -> {
@@ -120,7 +128,6 @@ public class HomeFragment extends Fragment {
                 TextView donationManagerNameHeader = view.findViewById(R.id.donationManagerNameHeader);
                 donationManagerNameHeader.setText(manager.getUsername() + "!");
 
-                // Observe donation sites
                 donationSiteLiveData.observe(getViewLifecycleOwner(), donationSites -> {
                     allDonationSites = donationSites;
                     filterData();
@@ -132,25 +139,21 @@ public class HomeFragment extends Fragment {
     }
 
     private void updateButtonStyles(Button buttonOwnSites, Button buttonVolunteerSites) {
-        // Reset both buttons
-        buttonOwnSites.setBackgroundColor(getResources().getColor(R.color.border)); // Use your default color
-        buttonVolunteerSites.setBackgroundColor(getResources().getColor(R.color.border)); // Use your default color
-        buttonOwnSites.setTextColor(getResources().getColor(R.color.black)); // Default text color
-        buttonVolunteerSites.setTextColor(getResources().getColor(R.color.black)); // Default text color
+        buttonOwnSites.setBackgroundColor(getResources().getColor(R.color.border));
+        buttonVolunteerSites.setBackgroundColor(getResources().getColor(R.color.border));
+        buttonOwnSites.setTextColor(getResources().getColor(R.color.black));
+        buttonVolunteerSites.setTextColor(getResources().getColor(R.color.black));
 
-        // Update the selected button
         if (isOwnSitesSelected) {
-            buttonOwnSites.setBackgroundColor(getResources().getColor(R.color.accent)); // Color for selected button
-            buttonOwnSites.setTextColor(getResources().getColor(R.color.white)); // Text color for selected button
-        } else if (isVolunteerSitesSelected) {
-            buttonVolunteerSites.setBackgroundColor(getResources().getColor(R.color.accent)); // Color for selected button
-            buttonVolunteerSites.setTextColor(getResources().getColor(R.color.white)); // Text color for selected button
+            buttonOwnSites.setBackgroundColor(getResources().getColor(R.color.accent));
+            buttonOwnSites.setTextColor(getResources().getColor(R.color.white));
+        } else {
+            buttonVolunteerSites.setBackgroundColor(getResources().getColor(R.color.accent));
+            buttonVolunteerSites.setTextColor(getResources().getColor(R.color.white));
         }
     }
 
     private void filterData() {
-        // This method is responsible for filtering data based on the selected filter
-
         BloodDonationSiteManager manager = bloodDonationSiteManagerLiveData.getValue();
         List<DonationSite> donationSites = donationSiteLiveData.getValue();
 
@@ -158,7 +161,6 @@ public class HomeFragment extends Fragment {
             List<DonationSite> filteredSites = new ArrayList<>();
 
             if (isOwnSitesSelected) {
-                // Filter own sites
                 for (DonationSite site : donationSites) {
                     for (DonationSite managerSite : manager.getDonationSites()) {
                         if (managerSite.getName().equals(site.getName())) {
@@ -167,8 +169,7 @@ public class HomeFragment extends Fragment {
                         }
                     }
                 }
-            } else if (isVolunteerSitesSelected) {
-                // Filter volunteer sites
+            } else {
                 for (DonationSite site : donationSites) {
                     for (BloodDonationSiteManager volunteer : site.getVolunteers()) {
                         if (volunteer.getEmail().equals(email)) {
@@ -179,8 +180,16 @@ public class HomeFragment extends Fragment {
                 }
             }
 
-            // Update the adapter with filtered data
             adapter.updateData(filteredSites);
         }
+    }
+
+    private void refreshData() {
+        // Re-fetch the data from Firestore
+        firestoreRepository.fetchDonationSites().observe(this, donationSites -> {
+            if (donationSites != null) {
+                donationSiteLiveData.setValue(donationSites);
+            }
+        });
     }
 }
