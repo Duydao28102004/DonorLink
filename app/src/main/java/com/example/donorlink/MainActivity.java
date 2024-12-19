@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         authRepository = new AuthenticationRepository();
-        firestoreRepository = new FirestoreRepository();
+        firestoreRepository = new FirestoreRepository(this);
         // remove the top bar
         getSupportActionBar().hide();
         setLoginView();

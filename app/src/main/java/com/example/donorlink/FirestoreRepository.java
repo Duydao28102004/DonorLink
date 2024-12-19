@@ -1,6 +1,7 @@
 package com.example.donorlink;
 
-import android.util.Log;
+import android.content.Context;
+import android.widget.Toast;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -16,9 +17,11 @@ import java.util.List;
 
 public class FirestoreRepository {
     private FirebaseFirestore db;
+    private Context context;
 
     // Constructor
-    public FirestoreRepository() {
+    public FirestoreRepository(Context context) {
+        this.context = context;
         db = FirebaseFirestore.getInstance();
     }
 
@@ -28,16 +31,16 @@ public class FirestoreRepository {
         db.collection("donors").document(donor.getEmail()).get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
-                        Log.e("Firestore", "Donor with this email already exists");
+                        Toast.makeText(context, "Donor with this email already exists", Toast.LENGTH_SHORT).show();
                     } else {
                         // Add the donor if the email doesn't exist
                         db.collection("donors").document(donor.getEmail())
                                 .set(donor)
-                                .addOnSuccessListener(aVoid -> Log.d("Firestore", "Donor added successfully"))
-                                .addOnFailureListener(e -> Log.e("Firestore", "Error adding donor", e));
+                                .addOnSuccessListener(aVoid -> Toast.makeText(context, "Donor added successfully", Toast.LENGTH_SHORT).show())
+                                .addOnFailureListener(e -> Toast.makeText(context, "Error adding donor", Toast.LENGTH_SHORT).show());
                     }
                 })
-                .addOnFailureListener(e -> Log.e("Firestore", "Error checking for existing donor", e));
+                .addOnFailureListener(e -> Toast.makeText(context, "Error checking for existing donor", Toast.LENGTH_SHORT).show());
     }
 
     // Fetch donors and return MutableLiveData
@@ -56,7 +59,7 @@ public class FirestoreRepository {
                     donorsLiveData.setValue(donors);  // Set the fetched data to LiveData
                 })
                 .addOnFailureListener(e -> {
-                    Log.e("Firestore", "Error fetching donors", e);
+                    Toast.makeText(context, "Error fetching donors", Toast.LENGTH_SHORT).show();
                     donorsLiveData.setValue(null);  // Optionally set null or handle error state
                 });
 
@@ -74,14 +77,14 @@ public class FirestoreRepository {
                         for (DocumentSnapshot document : querySnapshot.getDocuments()) {
                             document.getReference()
                                     .set(donor)  // Set the updated donor data
-                                    .addOnSuccessListener(aVoid -> Log.d("Firestore", "Donor updated successfully"))
-                                    .addOnFailureListener(e -> Log.e("Firestore", "Error updating donor", e));
+                                    .addOnSuccessListener(aVoid -> Toast.makeText(context, "Donor updated successfully", Toast.LENGTH_SHORT).show())
+                                    .addOnFailureListener(e -> Toast.makeText(context, "Error updating donor", Toast.LENGTH_SHORT).show());
                         }
                     } else {
-                        Log.e("Firestore", "No donor found with the given email");
+                        Toast.makeText(context, "No donor found with the given email", Toast.LENGTH_SHORT).show();
                     }
                 })
-                .addOnFailureListener(e -> Log.e("Firestore", "Error finding donor", e));
+                .addOnFailureListener(e -> Toast.makeText(context, "Error finding donor", Toast.LENGTH_SHORT).show());
     }
 
     // Delete donor
@@ -89,8 +92,8 @@ public class FirestoreRepository {
         db.collection("donors")
                 .document(email)
                 .delete()
-                .addOnSuccessListener(aVoid -> Log.d("Firestore", "Donor deleted successfully"))
-                .addOnFailureListener(e -> Log.e("Firestore", "Error deleting donor", e));
+                .addOnSuccessListener(aVoid -> Toast.makeText(context, "Donor deleted successfully", Toast.LENGTH_SHORT).show())
+                .addOnFailureListener(e -> Toast.makeText(context, "Error deleting donor", Toast.LENGTH_SHORT).show());
     }
 
     // Add Blood Donation Site Manager
@@ -99,16 +102,16 @@ public class FirestoreRepository {
         db.collection("bloodDonationSiteManagers").document(bloodDonationSiteManager.getEmail()).get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
-                        Log.e("Firestore", "Blood Donation Site Manager with this email already exists");
+                        Toast.makeText(context, "Blood Donation Site Manager with this email already exists", Toast.LENGTH_SHORT).show();
                     } else {
                         // Add the Blood Donation Site Manager if the email doesn't exist
                         db.collection("bloodDonationSiteManagers").document(bloodDonationSiteManager.getEmail())
                                 .set(bloodDonationSiteManager)
-                                .addOnSuccessListener(aVoid -> Log.d("Firestore", "Blood Donation Site Manager added successfully"))
-                                .addOnFailureListener(e -> Log.e("Firestore", "Error adding Blood Donation Site Manager", e));
+                                .addOnSuccessListener(aVoid -> Toast.makeText(context, "Blood Donation Site Manager added successfully", Toast.LENGTH_SHORT).show())
+                                .addOnFailureListener(e -> Toast.makeText(context, "Error adding Blood Donation Site Manager", Toast.LENGTH_SHORT).show());
                     }
                 })
-                .addOnFailureListener(e -> Log.e("Firestore", "Error checking for existing Blood Donation Site Manager", e));
+                .addOnFailureListener(e -> Toast.makeText(context, "Error checking for existing Blood Donation Site Manager", Toast.LENGTH_SHORT).show());
     }
 
     // Fetch Blood Donation Site Managers and return MutableLiveData
@@ -127,7 +130,7 @@ public class FirestoreRepository {
                     bloodDonationSiteManagersLiveData.setValue(bloodDonationSiteManagers);  // Set the fetched data to LiveData
                 })
                 .addOnFailureListener(e -> {
-                    Log.e("Firestore", "Error fetching Blood Donation Site Managers", e);
+                    Toast.makeText(context, "Error fetching Blood Donation Site Managers", Toast.LENGTH_SHORT).show();
                     bloodDonationSiteManagersLiveData.setValue(null);  // Optionally set null or handle error state
                 });
 
@@ -145,14 +148,14 @@ public class FirestoreRepository {
                         for (DocumentSnapshot document : querySnapshot.getDocuments()) {
                             document.getReference()
                                     .set(bloodDonationSiteManager)  // Set the updated Blood Donation Site Manager data
-                                    .addOnSuccessListener(aVoid -> Log.d("Firestore", "Blood Donation Site Manager updated successfully"))
-                                    .addOnFailureListener(e -> Log.e("Firestore", "Error updating Blood Donation Site Manager", e));
+                                    .addOnSuccessListener(aVoid -> Toast.makeText(context, "Blood Donation Site Manager updated successfully", Toast.LENGTH_SHORT).show())
+                                    .addOnFailureListener(e -> Toast.makeText(context, "Error updating Blood Donation Site Manager", Toast.LENGTH_SHORT).show());
                         }
                     } else {
-                        Log.e("Firestore", "No Blood Donation Site Manager found with the given email");
+                        Toast.makeText(context, "No Blood Donation Site Manager found with the given email", Toast.LENGTH_SHORT).show();
                     }
                 })
-                .addOnFailureListener(e -> Log.e("Firestore", "Error finding Blood Donation Site Manager", e));
+                .addOnFailureListener(e -> Toast.makeText(context, "Error finding Blood Donation Site Manager", Toast.LENGTH_SHORT).show());
     }
 
     // Delete Blood Donation Site Manager
@@ -160,8 +163,8 @@ public class FirestoreRepository {
         db.collection("bloodDonationSiteManagers")
                 .document(email)
                 .delete()
-                .addOnSuccessListener(aVoid -> Log.d("Firestore", "Blood Donation Site Manager deleted successfully"))
-                .addOnFailureListener(e -> Log.e("Firestore", "Error deleting Blood Donation Site Manager", e));
+                .addOnSuccessListener(aVoid -> Toast.makeText(context, "Blood Donation Site Manager deleted successfully", Toast.LENGTH_SHORT).show())
+                .addOnFailureListener(e -> Toast.makeText(context, "Error deleting Blood Donation Site Manager", Toast.LENGTH_SHORT).show());
     }
 
     // Add Donation Site
@@ -170,16 +173,16 @@ public class FirestoreRepository {
         db.collection("donationSites").document(donationSite.getName()).get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
-                        Log.e("Firestore", "Donation Site with this name already exists");
+                        Toast.makeText(context, "Donation Site with this name already exists", Toast.LENGTH_SHORT).show();
                     } else {
                         // Add the Donation Site if the name doesn't exist
                         db.collection("donationSites").document(donationSite.getName())
                                 .set(donationSite)
-                                .addOnSuccessListener(aVoid -> Log.d("Firestore", "Donation Site added successfully"))
-                                .addOnFailureListener(e -> Log.e("Firestore", "Error adding Donation Site", e));
+                                .addOnSuccessListener(aVoid -> Toast.makeText(context, "Donation Site added successfully", Toast.LENGTH_SHORT).show())
+                                .addOnFailureListener(e -> Toast.makeText(context, "Error adding Donation Site", Toast.LENGTH_SHORT).show());
                     }
                 })
-                .addOnFailureListener(e -> Log.e("Firestore", "Error checking for existing Donation Site", e));
+                .addOnFailureListener(e -> Toast.makeText(context, "Error checking for existing Donation Site", Toast.LENGTH_SHORT).show());
     }
 
     // Fetch Donation Sites and return MutableLiveData
@@ -198,7 +201,7 @@ public class FirestoreRepository {
                     donationSitesLiveData.setValue(donationSites);  // Set the fetched data to LiveData
                 })
                 .addOnFailureListener(e -> {
-                    Log.e("Firestore", "Error fetching Donation Sites", e);
+                    Toast.makeText(context, "Error fetching Donation Sites", Toast.LENGTH_SHORT).show();
                     donationSitesLiveData.setValue(null);  // Optionally set null or handle error state
                 });
 
@@ -216,14 +219,14 @@ public class FirestoreRepository {
                         for (DocumentSnapshot document : querySnapshot.getDocuments()) {
                             document.getReference()
                                     .set(donationSite)  // Set the updated Donation Site data
-                                    .addOnSuccessListener(aVoid -> Log.d("Firestore", "Donation Site updated successfully"))
-                                    .addOnFailureListener(e -> Log.e("Firestore", "Error updating Donation Site", e));
+                                    .addOnSuccessListener(aVoid -> Toast.makeText(context, "Donation Site updated successfully", Toast.LENGTH_SHORT).show())
+                                    .addOnFailureListener(e -> Toast.makeText(context, "Error updating Donation Site", Toast.LENGTH_SHORT).show());
                         }
                     } else {
-                        Log.e("Firestore", "No Donation Site found with the given name");
+                        Toast.makeText(context, "No Donation Site found with the given name", Toast.LENGTH_SHORT).show();
                     }
                 })
-                .addOnFailureListener(e -> Log.e("Firestore", "Error finding Donation Site", e));
+                .addOnFailureListener(e -> Toast.makeText(context, "Error finding Donation Site", Toast.LENGTH_SHORT).show());
     }
 
     // Delete Donation Site
@@ -231,7 +234,7 @@ public class FirestoreRepository {
         db.collection("donationSites")
                 .document(name)
                 .delete()
-                .addOnSuccessListener(aVoid -> Log.d("Firestore", "Donation Site deleted successfully"))
-                .addOnFailureListener(e -> Log.e("Firestore", "Error deleting Donation Site", e));
+                .addOnSuccessListener(aVoid -> Toast.makeText(context, "Donation Site deleted successfully", Toast.LENGTH_SHORT).show())
+                .addOnFailureListener(e -> Toast.makeText(context, "Error deleting Donation Site", Toast.LENGTH_SHORT).show());
     }
 }

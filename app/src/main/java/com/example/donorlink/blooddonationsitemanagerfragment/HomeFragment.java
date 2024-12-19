@@ -61,7 +61,7 @@ public class HomeFragment extends Fragment {
             email = getArguments().getString("email");
         }
 
-        firestoreRepository = new FirestoreRepository();
+        firestoreRepository = new FirestoreRepository(getContext());
 
         // Fetch blood donation site managers and observe changes
         firestoreRepository.fetchBloodDonationSiteManagers().observe(this, bloodDonationSiteManagers -> {

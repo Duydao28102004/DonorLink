@@ -25,7 +25,7 @@ public class DonorActivity extends AppCompatActivity {
         setContentView(R.layout.activity_donor);
         getSupportActionBar().hide();
 
-        firestoreRepository = new FirestoreRepository();
+        firestoreRepository = new FirestoreRepository(this);
         authenticationRepository = new AuthenticationRepository();
 
 
@@ -55,7 +55,7 @@ public class DonorActivity extends AppCompatActivity {
             } else if (itemId == R.id.nav_map) {
                 selectedFragment = new MapFragment();
             } else if (itemId == R.id.nav_profile) {
-//                selectedFragment = new ProfileFragment();
+                selectedFragment = new ProfileFragment();
             } else {
                 return false;
             }

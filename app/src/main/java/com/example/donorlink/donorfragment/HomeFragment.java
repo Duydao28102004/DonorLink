@@ -40,7 +40,7 @@ public class HomeFragment extends Fragment {
             email = getArguments().getString("email");
         }
 
-        firestoreRepository = new FirestoreRepository();
+        firestoreRepository = new FirestoreRepository(getContext());
 
         // Fetch donors and observe changes
         firestoreRepository.fetchDonors().observe(this, donors -> {
@@ -55,12 +55,11 @@ public class HomeFragment extends Fragment {
         });
 
         // Fetch donation sites list and observe changes
-//        firestoreRepository.fetchDonationSites().observe(this, donationSites -> {
-//            if (donationSites != null) {
-//                donationSiteLiveData.setValue(donationSites);
-//            }
-//        });
-        donationSiteLiveData.setValue(sampleData.generateTestDonationSite());
+        firestoreRepository.fetchDonationSites().observe(this, donationSites -> {
+            if (donationSites != null) {
+                donationSiteLiveData.setValue(donationSites);
+            }
+        });
     }
 
     @Override
@@ -77,9 +76,7 @@ public class HomeFragment extends Fragment {
         // Set up RecyclerView
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        // Set up the adapter
-        DonationSiteAdapter donationSiteAdapter = new DonationSiteAdapter(donationSiteLiveData.getValue());
-        recyclerView.setAdapter(donationSiteAdapter);
+
 
         // Observe the donorLiveData and update the UI when the donor is set
         donorLiveData.observe(getViewLifecycleOwner(), donor -> {
@@ -91,6 +88,10 @@ public class HomeFragment extends Fragment {
                 donationSiteLiveData.observe(getViewLifecycleOwner(), donationSites -> {
                     if (donationSites != null) {
                         int counter = 0;
+
+                        // Set up the adapter
+                        DonationSiteAdapter donationSiteAdapter = new DonationSiteAdapter(donationSiteLiveData.getValue());
+                        recyclerView.setAdapter(donationSiteAdapter);
 
                         for (DonationSite site : donationSites) {
                             if (site.getDonors().contains(donor)) {

@@ -23,7 +23,7 @@ public class BloodDonationSiteManagerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_donation_site_manager);
         getSupportActionBar().hide();
 
-        firestoreRepository = new FirestoreRepository();
+        firestoreRepository = new FirestoreRepository(this);
         authenticationRepository = new AuthenticationRepository();
 
         // Create a Bundle with the email argument
@@ -52,7 +52,7 @@ public class BloodDonationSiteManagerActivity extends AppCompatActivity {
             } else if (itemId == R.id.nav_explore) {
                 //selectedFragment = new ExploreFragment();
             } else if (itemId == R.id.nav_profile) {
-                //selectedFragment = new ProfileFragment();
+                selectedFragment = new ProfileFragment();
             } else {
                 return false;
             }
