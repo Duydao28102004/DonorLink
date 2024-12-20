@@ -118,8 +118,8 @@ public class AddDonationSiteActivity extends AppCompatActivity {
                 donationHours,
                 "",
                 description,
-                selectedLocation.latitude,
-                selectedLocation.longitude);
+                selectedLocation.longitude,
+                selectedLocation.latitude);
 
         // Save the new donation site to Firestore or your database
         firestoreRepository.addDonationSite(donationSite);

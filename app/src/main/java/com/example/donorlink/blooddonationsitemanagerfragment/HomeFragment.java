@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -44,8 +45,10 @@ public class HomeFragment extends Fragment {
     private final ActivityResultLauncher<Intent> addSiteLauncher =
             registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
                 if (result.getResultCode() == Activity.RESULT_OK) {
-                    // Refresh data after returning from AddDonationSiteActivity
-                    refreshData();
+                    Log.d("Calling finish adding", "Successfully");
+
+                    // Refresh data by restarting the fragment
+                    getActivity().recreate();
                 }
             });
 
@@ -135,6 +138,13 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        donationSiteLiveData.observe(getViewLifecycleOwner(), donationSites -> {
+            if (donationSites != null) {
+                allDonationSites = donationSites;
+                filterData(); // Refresh the data display
+            }
+        });
+
         return view;
     }
 
@@ -184,12 +194,4 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    private void refreshData() {
-        // Re-fetch the data from Firestore
-        firestoreRepository.fetchDonationSites().observe(this, donationSites -> {
-            if (donationSites != null) {
-                donationSiteLiveData.setValue(donationSites);
-            }
-        });
-    }
 }
