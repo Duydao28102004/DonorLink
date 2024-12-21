@@ -31,10 +31,13 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
 
@@ -46,6 +49,18 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private SearchResultsAdapter adapter;
     private RecyclerView searchResultsRecyclerView;
 
+    // Map marker
+    private Marker selectedMarker;
+    private Map<DonationSite, Marker> markerMap = new HashMap<>();
+
+    // Bottom sheet component
+    private LinearLayout bottomSheet;
+    private TextView siteName;
+    private TextView siteAddress;
+    private Button directionButton;
+    private Button callButton;
+    private Button shareButton;
+    private Button closeButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,6 +79,25 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         adapter = new SearchResultsAdapter(new ArrayList<>(), this::onDonationSiteSelected);
         searchResultsRecyclerView.setAdapter(adapter);
 
+        // Get the bottom sheet components
+        bottomSheet = view.findViewById(R.id.bottomSheet);
+        siteName = view.findViewById(R.id.siteName);
+        siteAddress = view.findViewById(R.id.siteAddress);
+        callButton = view.findViewById(R.id.callButton);
+        directionButton = view.findViewById(R.id.directionButton);
+        shareButton = view.findViewById(R.id.shareButton);
+        closeButton = view.findViewById(R.id.closeButton);
+        closeButton.setOnClickListener(v -> {
+            // Hide the bottom sheet
+            bottomSheet.setVisibility(View.GONE);
+
+            // Reset the color of the selected marker
+            if (selectedMarker != null) {
+                selectedMarker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+                selectedMarker = null; // Clear the selected marker reference
+            }
+        });
+
         // Set up the SearchView
         androidx.appcompat.widget.SearchView searchView = view.findViewById(R.id.searchView);
         searchView.setOnQueryTextListener(new androidx.appcompat.widget.SearchView.OnQueryTextListener() {
@@ -71,7 +105,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             public boolean onQueryTextSubmit(String query) {
                 // Trigger search when the user presses "Enter"
                 searchDonationSites(query);
-                return true;  // Returning true means the search action is handled
+                return true;
             }
 
             @Override
@@ -137,14 +171,29 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         // Remove any existing markers
         mMap.clear();
+        markerMap.clear();
 
         for (DonationSite site : donationSites) {
             LatLng position = new LatLng(site.getLatitude(), site.getLongitude());
-            mMap.addMarker(new MarkerOptions()
+            Marker marker = mMap.addMarker(new MarkerOptions()
                     .position(position)
                     .title(site.getName())
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+
+            markerMap.put(site, marker);
         }
+        // Set the marker click listener after all markers are added
+        mMap.setOnMarkerClickListener(marker -> {
+            for (Map.Entry<DonationSite, Marker> entry : markerMap.entrySet()) {
+                if (entry.getValue().equals(marker)) {
+                    onDonationSiteSelected(entry.getKey());
+                    break;
+                }
+            }
+
+            // Return false to keep the default behavior (e.g., camera centering on marker)
+            return false;
+        });
     }
 
     private void onDonationSiteSelected(DonationSite site) {
@@ -152,8 +201,27 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         LatLng position = new LatLng(site.getLatitude(), site.getLongitude());
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 15));
 
+        // Update marker color
+        if (selectedMarker != null) {
+            selectedMarker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+        }
+
+        // Get the marker and set color
+        Marker marker = markerMap.get(site);
+        if (marker != null) {
+            marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+            selectedMarker = marker;
+        }
+
+        displayBottomSheet(site.getName(), site.getAddress());
         // Hide the RecyclerView after selection
         searchResultsRecyclerView.setVisibility(View.GONE);
+    }
+
+    private void displayBottomSheet(String name, String address) {
+        siteName.setText(name);
+        siteAddress.setText(address);
+        bottomSheet.setVisibility(View.VISIBLE);
     }
 
     private void enableMyLocation() {
@@ -179,6 +247,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 enableMyLocation();
             }
+        } else {
+            Toast.makeText(getContext(),"Location permission denied", Toast.LENGTH_SHORT).show();
         }
     }
 }
