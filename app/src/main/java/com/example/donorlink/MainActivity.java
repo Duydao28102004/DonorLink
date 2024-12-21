@@ -116,8 +116,7 @@ public class MainActivity extends AppCompatActivity {
                     // Create the user in FireStore
                     if (userTypeSwitch.isChecked()) {
                         // Create a BloodDonationSiteManager
-                        List<DonationSite> donationSiteList = new ArrayList<>();
-                        BloodDonationSiteManager manager = new BloodDonationSiteManager(username, email, donationSiteList);
+                        BloodDonationSiteManager manager = new BloodDonationSiteManager(username, email);
                         // Save the user to FireStore
                         firestoreRepository.addBloodDonationSiteManager(manager);
                     } else {

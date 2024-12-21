@@ -7,7 +7,6 @@ import android.os.Bundle;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,7 +25,6 @@ import com.example.donorlink.FirestoreRepository;
 import com.example.donorlink.R;
 import com.example.donorlink.model.BloodDonationSiteManager;
 import com.example.donorlink.model.DonationSite;
-import com.example.donorlink.sampleData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -172,11 +170,8 @@ public class HomeFragment extends Fragment {
 
             if (isOwnSitesSelected) {
                 for (DonationSite site : donationSites) {
-                    for (DonationSite managerSite : manager.getDonationSites()) {
-                        if (managerSite.getName().equals(site.getName())) {
-                            filteredSites.add(site);
-                            break;
-                        }
+                    if (site.getManager().getEmail().equals(email)) {
+                        filteredSites.add(site);
                     }
                 }
             } else {

@@ -37,7 +37,7 @@ public class AddDonationSiteActivity extends AppCompatActivity {
 
     private FirestoreRepository firestoreRepository;
     private AuthenticationRepository authenticationRepository;
-    MutableLiveData<BloodDonationSiteManager> managers = new MutableLiveData<>();
+    MutableLiveData<BloodDonationSiteManager> manager = new MutableLiveData<>();
 
 
     @Override
@@ -48,6 +48,18 @@ public class AddDonationSiteActivity extends AppCompatActivity {
         // Get the repo instance
         firestoreRepository = new FirestoreRepository(this);
         authenticationRepository = new AuthenticationRepository();
+
+        // Get the manager
+        firestoreRepository.fetchBloodDonationSiteManagers().observe(this, bloodDonationSiteManagers -> {
+                    if (bloodDonationSiteManagers != null) {
+                        for (BloodDonationSiteManager manager : bloodDonationSiteManagers) {
+                            if (manager.getEmail().equals(authenticationRepository.getCurrentUser().getEmail())) {
+                                this.manager.setValue(manager);
+                                break;
+                            }
+                        }
+                    }
+                });
 
         // Initialize Views
         editTextDonationSiteName = findViewById(R.id.editTextDonationSiteName);
@@ -119,7 +131,8 @@ public class AddDonationSiteActivity extends AppCompatActivity {
                 "",
                 description,
                 selectedLocation.longitude,
-                selectedLocation.latitude);
+                selectedLocation.latitude,
+                manager.getValue());
 
         // Save the new donation site to Firestore or your database
         firestoreRepository.addDonationSite(donationSite);
@@ -127,7 +140,6 @@ public class AddDonationSiteActivity extends AppCompatActivity {
             if (bloodDonationSiteManagers != null) {
                 for (BloodDonationSiteManager manager : bloodDonationSiteManagers) {
                     if (manager.getEmail().equals(authenticationRepository.getCurrentUser().getEmail())) {
-                        manager.getDonationSites().add(donationSite);
                         firestoreRepository.updateBloodDonationSiteManager(manager);
                         break;
                     }

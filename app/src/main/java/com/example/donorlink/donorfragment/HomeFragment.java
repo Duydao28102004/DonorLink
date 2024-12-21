@@ -15,12 +15,10 @@ import android.widget.TextView;
 import com.example.donorlink.DonationSiteAdapter;
 import com.example.donorlink.FirestoreRepository;
 import com.example.donorlink.R;
-import com.example.donorlink.sampleData;
 import com.example.donorlink.model.DonationSite;
 import com.example.donorlink.model.Donor;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class HomeFragment extends Fragment {
     private String email;
