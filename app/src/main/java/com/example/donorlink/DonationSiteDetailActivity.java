@@ -1,6 +1,7 @@
 package com.example.donorlink;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -27,6 +28,10 @@ public class DonationSiteDetailActivity extends AppCompatActivity {
     User user;
     Boolean asVolunteer = false;
     Boolean asDonor = false;
+    Button signInAsDonorButton;
+    Button signInAsVolunteerButton;
+    Button editDonationSiteButton;
+    Button deleteDonationSiteButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,10 +52,12 @@ public class DonationSiteDetailActivity extends AppCompatActivity {
         TextView siteAddressTextView = findViewById(R.id.textViewDonationSiteAddress);
         TextView siteHoursTextView = findViewById(R.id.textViewDonationSiteHours);
         TextView siteDescriptionTextView = findViewById(R.id.textViewDonationSiteDescription);
-        Button signInAsDonorButton = findViewById(R.id.signInAsDonor);
-        Button signInAsVolunteerButton = findViewById(R.id.signInAsVolunteer);
-        Button editDonationSiteButton = findViewById(R.id.buttonEditDonationSite);
+        signInAsDonorButton = findViewById(R.id.signInAsDonor);
+        signInAsVolunteerButton = findViewById(R.id.signInAsVolunteer);
+        editDonationSiteButton = findViewById(R.id.buttonEditDonationSite);
         TextView requiredBloodTypesTextView = findViewById(R.id.textViewRequiredBloodTypes);
+        deleteDonationSiteButton = findViewById(R.id.buttonDeleteDonationSite);
+
 
 
         Button backButton = findViewById(R.id.buttonBack);
@@ -91,7 +98,23 @@ public class DonationSiteDetailActivity extends AppCompatActivity {
 
                         // Check if the current user is the manager of this site
                         if (donationSite.getManager().getEmail().equals(manager.getEmail())) {
+                            // Show "Delete" button
+                            findViewById(R.id.buttonDeleteDonationSite).setVisibility(View.VISIBLE);
+                            deleteDonationSiteButton.setOnClickListener(v -> showDeleteConfirmationDialog());
+
+                            // Existing code for editing site
                             findViewById(R.id.buttonEditDonationSite).setVisibility(View.VISIBLE);
+                            editDonationSiteButton.setOnClickListener(v -> {
+                                Intent intent = new Intent(DonationSiteDetailActivity.this, UpdateDonationSiteActivity.class);
+                                intent.putExtra("name", donationSite.getName());
+                                startActivityForResult(intent, 100);
+                            });
+                            findViewById(R.id.buttonEditDonationSite).setVisibility(View.VISIBLE);
+                            editDonationSiteButton.setOnClickListener(v -> {
+                                Intent intent = new Intent(DonationSiteDetailActivity.this, UpdateDonationSiteActivity.class);
+                                intent.putExtra("name", donationSite.getName());
+                                startActivityForResult(intent, 100);
+                            });
                         }
 
                         // Enable "Sign in as Volunteer" button
@@ -189,6 +212,22 @@ public class DonationSiteDetailActivity extends AppCompatActivity {
         }
     }
 
+    private void showDeleteConfirmationDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("Confirm Deletion")
+                .setMessage("Are you sure you want to delete this donation site?")
+                .setPositiveButton("Yes", (dialog, which) -> deleteDonationSite())
+                .setNegativeButton("No", null)
+                .show();
+    }
+
+    private void deleteDonationSite() {
+        // Remove the donation site from Firestore
+        firestoreRepository.deleteDonationSite(donationSite.getName());
+        Toast.makeText(DonationSiteDetailActivity.this, "Donation site deleted successfully.", Toast.LENGTH_SHORT).show();
+        finish();
+    }
+
     @Override
     public void onBackPressed() {
         // Set the result as RESULT_OK
@@ -199,5 +238,13 @@ public class DonationSiteDetailActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 100 && resultCode == Activity.RESULT_OK) {
+            recreate();
+        }
+    }
 
 }

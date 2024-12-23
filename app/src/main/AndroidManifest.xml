@@ -17,6 +17,9 @@
         android:theme="@style/Theme.DonorLink"
         tools:targetApi="31">
         <activity
+            android:name=".UpdateDonationSiteActivity"
+            android:exported="false" />
+        <activity
             android:name=".DonationSiteDetailActivity"
             android:exported="false" />
         <activity
@@ -24,7 +27,7 @@
             android:exported="false" />
         <activity
             android:name=".donorfragment.DonatedSiteActivity"
-            android:exported="false"/>
+            android:exported="false" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
