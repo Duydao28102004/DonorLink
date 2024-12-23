@@ -9,7 +9,7 @@
         android:id="@+id/buttonBack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="< Back"
+        android:text="Back"
         android:backgroundTint="@color/secondary"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true" />
@@ -61,6 +61,16 @@
                 android:textSize="16sp"
                 android:layout_marginBottom="8dp"/>
 
+            <!-- Required Blood Types -->
+            <TextView
+                android:id="@+id/textViewRequiredBloodTypes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Required Blood Types: A+, O-, B+"
+                android:textSize="16sp"
+                android:layout_marginBottom="16dp"
+                android:textColor="@android:color/holo_red_dark" />
+
             <!-- Description -->
             <TextView
                 android:id="@+id/textViewDonationSiteDescription"
@@ -72,10 +82,26 @@
 
             <!-- Add Donor/Volunteer Button -->
             <Button
-                android:id="@+id/buttonAddDonorVolunteer"
+                android:id="@+id/signInAsVolunteer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Add Donor/Volunteer"
+                android:text="Sign In As Volunteer"
+                android:visibility="gone"
+                android:layout_marginBottom="16dp"/>
+
+            <Button
+                android:id="@+id/buttonEditDonationSite"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Edit Donation Site"
+                android:visibility="gone"
+                android:layout_marginBottom="16dp"/>
+            <Button
+                android:id="@+id/signInAsDonor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Sign In As Donor"
+                android:visibility="gone"
                 android:layout_marginBottom="16dp"/>
 
         </LinearLayout>

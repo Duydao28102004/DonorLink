@@ -1,5 +1,6 @@
 package com.example.donorlink.donorfragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -70,6 +71,7 @@ public class HomeFragment extends Fragment {
         TextView donorName = view.findViewById(R.id.tvDonorName);
         TextView donationSite = view.findViewById(R.id.tvDonationSites);
         RecyclerView recyclerView = view.findViewById(R.id.recyclerViewDonationSites);
+        TextView seeAllText = view.findViewById(R.id.tvSeeAllDonationSites);
 
         // Set up RecyclerView
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -81,6 +83,13 @@ public class HomeFragment extends Fragment {
             if (donor != null) {
                 donorNameHeader.setText(donor.getUsername() + "!");
                 donorName.setText("Let's start, " + donor.getUsername());
+                seeAllText.setOnClickListener(v -> {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("email", donor.getEmail());
+                    Intent intent = new Intent(getContext(), DonatedSiteActivity.class);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                });
 
                 // Observe donation sites once donor data is available
                 donationSiteLiveData.observe(getViewLifecycleOwner(), donationSites -> {
@@ -92,8 +101,10 @@ public class HomeFragment extends Fragment {
                         recyclerView.setAdapter(donationSiteAdapter);
 
                         for (DonationSite site : donationSites) {
-                            if (site.getDonors().contains(donor)) {
-                                counter++;
+                            for (Donor currentDonor : site.getDonors()) {
+                                if (currentDonor.getEmail().equals(donor.getEmail())) {
+                                    counter++;
+                                }
                             }
                         }
 

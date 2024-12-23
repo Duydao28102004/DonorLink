@@ -8,7 +8,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-
+        <Button
+            android:id="@+id/buttonBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Back"
+            android:backgroundTint="@color/secondary"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true" />
         <!-- Site Name -->
         <EditText
             android:id="@+id/editTextDonationSiteName"
@@ -69,6 +76,22 @@
                 android:layout_height="wrap_content"
                 android:text="Select Time" />
 
+        </LinearLayout>
+
+        <!-- Required Blood Types -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Select Required Blood Types"
+            android:textSize="16sp"
+            android:paddingTop="8dp" />
+
+        <LinearLayout
+            android:id="@+id/linearLayoutBloodTypes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="8dp">
         </LinearLayout>
 
         <!-- Description -->

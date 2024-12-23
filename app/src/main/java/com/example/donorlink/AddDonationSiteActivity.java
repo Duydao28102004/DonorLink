@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +24,7 @@ import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -43,6 +46,8 @@ public class AddDonationSiteActivity extends AppCompatActivity {
     private String selectedAddress;
     private LatLng selectedLocation;
     private String openingTime, closingTime;
+
+    private List<String> selectedBloodTypes = new ArrayList<>();
 
     private FirestoreRepository firestoreRepository;
     private AuthenticationRepository authenticationRepository;
@@ -78,6 +83,29 @@ public class AddDonationSiteActivity extends AppCompatActivity {
         textViewSelectedAddress = findViewById(R.id.textViewSelectedAddress);
         buttonSearchAddress = findViewById(R.id.buttonSearchAddress);
         buttonSubmit = findViewById(R.id.buttonSubmitDonationSite);
+        Button backButton = findViewById(R.id.buttonBack);
+        backButton.setOnClickListener(v -> finish());
+
+        // Generate checkboxes for blood types
+        LinearLayout bloodTypeLayout = findViewById(R.id.linearLayoutBloodTypes);
+        String[] bloodTypes = getResources().getStringArray(R.array.blood_types);
+
+        for (int i = 1; i < bloodTypes.length; i++) { // Skip the placeholder "Select Your Blood Type"
+            CheckBox checkBox = new CheckBox(this);
+            checkBox.setText(bloodTypes[i]);
+
+            // Track selected blood types
+            checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                if (isChecked) {
+                    selectedBloodTypes.add(buttonView.getText().toString());
+                } else {
+                    selectedBloodTypes.remove(buttonView.getText().toString());
+                }
+            });
+
+            // Add the checkbox to the layout
+            bloodTypeLayout.addView(checkBox);
+        }
 
         // Initialize Places SDK
         if (!Places.isInitialized()) {
@@ -168,6 +196,11 @@ public class AddDonationSiteActivity extends AppCompatActivity {
             return;
         }
 
+        if (selectedBloodTypes.isEmpty()) {
+            Toast.makeText(this, "Please select at least one required blood type", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         // Create a new DonationSite object
         DonationSite donationSite = new DonationSite(
                 name,
@@ -178,6 +211,8 @@ public class AddDonationSiteActivity extends AppCompatActivity {
                 selectedLocation.longitude,
                 selectedLocation.latitude,
                 manager.getValue());
+
+        donationSite.setBloodType(selectedBloodTypes);
         // Check if the name is exist or not
         firestoreRepository.fetchDonationSites().observe(this, donationSites -> {
                     if (donationSites != null) {

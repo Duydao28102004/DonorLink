@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.donorlink.model.DonationSite;
@@ -41,10 +42,12 @@ public class DonationSiteAdapter extends RecyclerView.Adapter<DonationSiteAdapte
         holder.siteHoursTextView.setText("Donation Hours: " + site.getDonationHours());
         // Set the click listener on the whole item
         holder.itemView.setOnClickListener(v -> {
-            // Create an Intent to navigate to the DonationSiteDetailsActivity
-            Intent intent = new Intent(context, DonationSiteDetailActivity.class);
-            intent.putExtra("name", site.getName()); // Pass the DonationSite object
-            context.startActivity(intent);
+            if (context instanceof AppCompatActivity) {
+                AppCompatActivity activity = (AppCompatActivity) context;
+                Intent intent = new Intent(activity, DonationSiteDetailActivity.class);
+                intent.putExtra("name", site.getName());
+                activity.startActivityForResult(intent, 1001); // Unique request code
+            }
         });
     }
 

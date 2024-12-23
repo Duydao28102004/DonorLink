@@ -17,4 +17,5 @@ public class Donor extends User {
     public void setBloodType(String BloodType) {
         this.BloodType = BloodType;
     }
+
 }

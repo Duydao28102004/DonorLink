@@ -1,6 +1,7 @@
 package com.example.donorlink.donorfragment;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,6 +21,7 @@ import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.donorlink.DonationSiteDetailActivity;
 import com.example.donorlink.FirestoreRepository;
 import com.example.donorlink.R;
 import com.example.donorlink.model.DonationSite;
@@ -60,7 +62,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private TextView siteAddress;
     private Button directionButton;
     private Button callButton;
-    private Button shareButton;
+    private Button detailButton;
     private Button closeButton;
 
     @Override
@@ -86,7 +88,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         siteAddress = view.findViewById(R.id.siteAddress);
         callButton = view.findViewById(R.id.callButton);
         directionButton = view.findViewById(R.id.directionButton);
-        shareButton = view.findViewById(R.id.shareButton);
+        detailButton = view.findViewById(R.id.detailButton);
         closeButton = view.findViewById(R.id.closeButton);
         closeButton.setOnClickListener(v -> {
             // Hide the bottom sheet
@@ -180,7 +182,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             LatLng position = new LatLng(site.getLatitude(), site.getLongitude());
             Marker marker = mMap.addMarker(new MarkerOptions()
                     .position(position)
-                    .title(site.getName())
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
 
             markerMap.put(site, marker);
@@ -226,6 +227,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         siteName.setText(name);
         siteAddress.setText(address);
         bottomSheet.setVisibility(View.VISIBLE);
+        detailButton.setOnClickListener(v -> {
+            // Open the detail page
+            Intent intent = new Intent(getContext(), DonationSiteDetailActivity.class);
+            intent.putExtra("name", name);
+            startActivity(intent);
+        });
     }
 
     private void enableMyLocation() {

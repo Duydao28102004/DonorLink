@@ -1,6 +1,7 @@
 package com.example.donorlink.model;
 
 import java.util.List;
+import java.util.Objects;
 
 public class BloodDonationSiteManager extends User {
 
