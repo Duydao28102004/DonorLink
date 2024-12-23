@@ -29,6 +29,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -131,6 +132,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         enableMyLocation();
+        mMap.getUiSettings().setMapToolbarEnabled(false);
 
         // Fetch and observe donation site data to add markers
         firestoreRepository.fetchDonationSites().observe(getViewLifecycleOwner(), donationSites -> {
@@ -173,6 +175,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         mMap.clear();
         markerMap.clear();
 
+        // Recursively add marker for each donation site
         for (DonationSite site : donationSites) {
             LatLng position = new LatLng(site.getLatitude(), site.getLongitude());
             Marker marker = mMap.addMarker(new MarkerOptions()
@@ -182,6 +185,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
             markerMap.put(site, marker);
         }
+
         // Set the marker click listener after all markers are added
         mMap.setOnMarkerClickListener(marker -> {
             for (Map.Entry<DonationSite, Marker> entry : markerMap.entrySet()) {
@@ -191,7 +195,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 }
             }
 
-            // Return false to keep the default behavior (e.g., camera centering on marker)
+            // Return false to keep the default behavior
             return false;
         });
     }
@@ -225,14 +229,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private void enableMyLocation() {
+        // Ask for permission from user
         if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
             return;
         }
 
+        // Add the location inside the map
         mMap.setMyLocationEnabled(true);
 
+        // Center in the user location
         fusedLocationProviderClient.getLastLocation().addOnSuccessListener(location -> {
             if (location != null) {
                 LatLng userLocation = new LatLng(location.getLatitude(), location.getLongitude());

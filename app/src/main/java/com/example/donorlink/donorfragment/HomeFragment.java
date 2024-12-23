@@ -88,7 +88,7 @@ public class HomeFragment extends Fragment {
                         int counter = 0;
 
                         // Set up the adapter
-                        DonationSiteAdapter donationSiteAdapter = new DonationSiteAdapter(donationSiteLiveData.getValue());
+                        DonationSiteAdapter donationSiteAdapter = new DonationSiteAdapter(donationSiteLiveData.getValue(), getContext());
                         recyclerView.setAdapter(donationSiteAdapter);
 
                         for (DonationSite site : donationSites) {

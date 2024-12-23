@@ -25,15 +25,24 @@ import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import java.util.Arrays;
 import java.util.List;
 
+import android.app.TimePickerDialog;
+import android.widget.TimePicker;
+
+import java.util.Calendar;
+
+
 public class AddDonationSiteActivity extends AppCompatActivity {
     private static final int AUTOCOMPLETE_REQUEST_CODE = 1;
 
     private EditText editTextDonationSiteName, editTextDonationHours, editTextDescription;
     private TextView textViewSelectedAddress;
     private Button buttonSearchAddress, buttonSubmit;
+    private Button buttonOpeningTime, buttonClosingTime;
+
 
     private String selectedAddress;
     private LatLng selectedLocation;
+    private String openingTime, closingTime;
 
     private FirestoreRepository firestoreRepository;
     private AuthenticationRepository authenticationRepository;
@@ -63,7 +72,8 @@ public class AddDonationSiteActivity extends AppCompatActivity {
 
         // Initialize Views
         editTextDonationSiteName = findViewById(R.id.editTextDonationSiteName);
-        editTextDonationHours = findViewById(R.id.editTextDonationHours);
+        buttonOpeningTime = findViewById(R.id.buttonOpeningTime);
+        buttonClosingTime = findViewById(R.id.buttonClosingTime);
         editTextDescription = findViewById(R.id.editTextDescription);
         textViewSelectedAddress = findViewById(R.id.textViewSelectedAddress);
         buttonSearchAddress = findViewById(R.id.buttonSearchAddress);
@@ -77,8 +87,42 @@ public class AddDonationSiteActivity extends AppCompatActivity {
         // Button click to open Autocomplete for address selection
         buttonSearchAddress.setOnClickListener(v -> openAutocomplete());
 
+        // Handle opening time selection
+        buttonOpeningTime.setOnClickListener(v -> openTimePickerDialog(true));
+
+        // Handle closing time selection
+        buttonClosingTime.setOnClickListener(v -> openTimePickerDialog(false));
+
         // Submit the form
         buttonSubmit.setOnClickListener(v -> submitDonationSite());
+    }
+
+    // Method to open TimePickerDialog for opening or closing time
+    private void openTimePickerDialog(boolean isOpeningTime) {
+        Calendar calendar = Calendar.getInstance();
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(Calendar.MINUTE);
+
+        TimePickerDialog timePickerDialog = new TimePickerDialog(
+                AddDonationSiteActivity.this,
+                new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int selectedHour, int selectedMinute) {
+                        // Format the time with hour and minute
+                        String formattedTime = String.format("%02d:%02d", selectedHour, selectedMinute);
+
+                        if (isOpeningTime) {
+                            openingTime = formattedTime;
+                            buttonOpeningTime.setText("Opening Time: " + openingTime);
+                        } else {
+                            closingTime = formattedTime;
+                            buttonClosingTime.setText("Closing Time: " + closingTime);
+                        }
+                    }
+                },
+                hour, minute, true
+        );
+        timePickerDialog.show();
     }
 
     // Method to open Google Places Autocomplete
@@ -115,9 +159,10 @@ public class AddDonationSiteActivity extends AppCompatActivity {
     // Method to submit the donation site
     private void submitDonationSite() {
         String name = editTextDonationSiteName.getText().toString();
-        String donationHours = editTextDonationHours.getText().toString();
+        String donationHours = openingTime + " - " + closingTime;
         String description = editTextDescription.getText().toString();
 
+        Log.d("donation hours", donationHours);
         if (name.isEmpty() || donationHours.isEmpty() || selectedAddress == null || description.isEmpty() || selectedLocation == null) {
             Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
             return;
@@ -133,19 +178,20 @@ public class AddDonationSiteActivity extends AppCompatActivity {
                 selectedLocation.longitude,
                 selectedLocation.latitude,
                 manager.getValue());
+        // Check if the name is exist or not
+        firestoreRepository.fetchDonationSites().observe(this, donationSites -> {
+                    if (donationSites != null) {
+                        for (DonationSite site : donationSites) {
+                            if (site.getName().equals(name)) {
+                                Toast.makeText(this, "Donation Site Name Already Exist", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                        }
+                    }
+                });
 
         // Save the new donation site to Firestore or your database
         firestoreRepository.addDonationSite(donationSite);
-        firestoreRepository.fetchBloodDonationSiteManagers().observe(this, bloodDonationSiteManagers -> {
-            if (bloodDonationSiteManagers != null) {
-                for (BloodDonationSiteManager manager : bloodDonationSiteManagers) {
-                    if (manager.getEmail().equals(authenticationRepository.getCurrentUser().getEmail())) {
-                        firestoreRepository.updateBloodDonationSiteManager(manager);
-                        break;
-                    }
-                }
-            }
-        });
 
 
         Toast.makeText(this, "Donation Site Created Successfully", Toast.LENGTH_SHORT).show();

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <!-- Back Button positioned at the top left -->
+    <Button
+        android:id="@+id/buttonBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="< Back"
+        android:backgroundTint="@color/secondary"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/buttonBack"
+        android:paddingTop="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Site Image -->
+            <ImageView
+                android:id="@+id/imageViewDonationSiteImage"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginBottom="16dp"
+                android:src="@drawable/donation_site" />
+
+            <!-- Site Name -->
+            <TextView
+                android:id="@+id/textViewDonationSiteName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Donation Site Name"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp"/>
+
+            <!-- Address -->
+            <TextView
+                android:id="@+id/textViewDonationSiteAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Address: 123 Main St, City, Country"
+                android:textSize="16sp"
+                android:layout_marginBottom="8dp"/>
+
+            <!-- Donation Hours -->
+            <TextView
+                android:id="@+id/textViewDonationSiteHours"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Donation Hours: 9:00 AM - 5:00 PM"
+                android:textSize="16sp"
+                android:layout_marginBottom="8dp"/>
+
+            <!-- Description -->
+            <TextView
+                android:id="@+id/textViewDonationSiteDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Description: This is a donation site where people can donate blood. We welcome all donors."
+                android:textSize="16sp"
+                android:layout_marginBottom="16dp"/>
+
+            <!-- Add Donor/Volunteer Button -->
+            <Button
+                android:id="@+id/buttonAddDonorVolunteer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Add Donor/Volunteer"
+                android:layout_marginBottom="16dp"/>
+
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

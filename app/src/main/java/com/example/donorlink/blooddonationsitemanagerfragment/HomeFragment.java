@@ -90,7 +90,7 @@ public class HomeFragment extends Fragment {
         // Initialize RecyclerView and Adapter
         RecyclerView recyclerView = view.findViewById(R.id.recyclerViewDonationSites);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new DonationSiteAdapter(new ArrayList<>());
+        adapter = new DonationSiteAdapter(new ArrayList<>(), getContext());
         recyclerView.setAdapter(adapter);
 
         // Plus button to add a new donation site

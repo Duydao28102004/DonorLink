@@ -31,12 +31,45 @@
             android:textSize="16sp"
             android:paddingTop="8dp" />
 
-        <!-- Donation Hours -->
-        <EditText
-            android:id="@+id/editTextDonationHours"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Operating Hours (e.g., 9 AM - 5 PM)" />
+            android:orientation="horizontal">
+
+            <!-- Opening Time Picker -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Opening Time:"
+                android:paddingEnd="8dp"/>
+
+            <Button
+                android:id="@+id/buttonOpeningTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Select Time" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <!-- Closing Time Picker -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Closing Time:"
+                android:paddingEnd="8dp"/>
+
+            <Button
+                android:id="@+id/buttonClosingTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Select Time" />
+
+        </LinearLayout>
 
         <!-- Description -->
         <EditText
