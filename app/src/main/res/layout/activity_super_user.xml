@@ -25,6 +25,13 @@
             android:textColor="#1B1B1B"
             android:textSize="20sp"
             android:textStyle="bold"/>
+        <Button
+            android:id="@+id/logoutButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Log Out"
+            android:backgroundTint="@color/warning"
+            android:layout_marginBottom="8dp"/>
     </LinearLayout>
 
     <!-- Search View -->
@@ -40,4 +47,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="16dp" />
+
+
 </LinearLayout>

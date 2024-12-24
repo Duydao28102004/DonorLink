@@ -87,7 +87,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         bottomSheet = view.findViewById(R.id.bottomSheet);
         siteName = view.findViewById(R.id.siteName);
         siteAddress = view.findViewById(R.id.siteAddress);
-        callButton = view.findViewById(R.id.callButton);
         directionButton = view.findViewById(R.id.directionButton);
         detailButton = view.findViewById(R.id.detailButton);
         closeButton = view.findViewById(R.id.closeButton);
