@@ -81,13 +81,6 @@
                     android:text="Direction" />
 
                 <Button
-                    android:id="@+id/callButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Call"
-                    android:layout_marginStart="10dp" />
-
-                <Button
                     android:id="@+id/detailButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

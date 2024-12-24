@@ -78,10 +78,40 @@ public class DonationSiteDetailActivity extends AppCompatActivity {
 
                         // Check user status
                         checkStatus();
+
+                        if (authenticationRepository.getCurrentUser().getEmail().equals("superuser@gmail.com")) {
+                            TextView volunteerListTextView = findViewById(R.id.volunteerList);
+                            TextView donorListTextView = findViewById(R.id.donorList);
+                            StringBuilder volunteerList = new StringBuilder();
+                            StringBuilder donorList = new StringBuilder();
+
+                            for (BloodDonationSiteManager manager : donationSite.getVolunteers()) {
+                                volunteerList.append(manager.getUsername()).append(", ");
+                            }
+                            for (Donor donor : donationSite.getDonors()) {
+                                donorList.append(donor.getUsername()).append(", ");
+                            }
+
+                            if (volunteerList.length() > 0) {
+                                volunteerList.deleteCharAt(volunteerList.length() - 1);
+                                volunteerList.deleteCharAt(volunteerList.length() - 1);
+                                volunteerListTextView.setText("Volunteers: " + volunteerList.toString());
+                                volunteerListTextView.setVisibility(View.VISIBLE);
+
+                            }
+
+                            if (donorList.length() > 0) {
+                                donorList.deleteCharAt(donorList.length() - 1);
+                                donorList.deleteCharAt(donorList.length() - 1);
+                                donorListTextView.setText("Donors: " + donorList.toString());
+                                donorListTextView.setVisibility(View.VISIBLE);
+                            }
+                        }
                     }
                 }
             }
         });
+
 
         // Attach click listeners to buttons
         signInAsVolunteerButton.setOnClickListener(v -> signInAsVolunteer());

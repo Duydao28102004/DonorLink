@@ -31,7 +31,7 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/usernameInputLayout"
         android:layout_width="335dp"
-        android:layout_height="48dp"
+        android:layout_height="60dp"
         android:layout_marginStart="35dp"
         android:layout_marginTop="100dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -48,9 +48,9 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/emailInputLayout"
         android:layout_width="335dp"
-        android:layout_height="48dp"
+        android:layout_height="60dp"
         android:layout_marginStart="35dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="25dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/usernameInputLayout">
 
@@ -65,9 +65,9 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/passwordInputLayout"
         android:layout_width="335dp"
-        android:layout_height="48dp"
+        android:layout_height="60dp"
         android:layout_marginStart="35dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="25dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/emailInputLayout">
 
@@ -82,9 +82,9 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/repasswordInputLayout"
         android:layout_width="335dp"
-        android:layout_height="48dp"
+        android:layout_height="60dp"
         android:layout_marginStart="35dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="25dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/passwordInputLayout">
 

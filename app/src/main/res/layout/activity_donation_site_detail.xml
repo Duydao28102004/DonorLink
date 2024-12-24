@@ -80,6 +80,27 @@
                 android:textSize="16sp"
                 android:layout_marginBottom="16dp"/>
 
+            <!-- Volunteer list -->
+            <TextView
+                android:id="@+id/volunteerList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Volunteer:"
+                android:textSize="16sp"
+                android:visibility="gone"
+                android:layout_marginBottom="16dp"/>
+
+            <!-- Donor list -->
+            <TextView
+                android:id="@+id/donorList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Volunteer:"
+                android:textSize="16sp"
+                android:visibility="gone"
+                android:layout_marginBottom="16dp"/>
+
+
             <!-- Add Donor/Volunteer Button -->
             <Button
                 android:id="@+id/signInAsVolunteer"

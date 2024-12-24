@@ -11,6 +11,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
+
+import com.example.donorlink.model.BloodDonationSiteManager;
+import com.example.donorlink.model.Donor;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -60,17 +64,59 @@ public class ProfileFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        // Get the logout button and set an onClickListener
-        Button logoutButton = view.findViewById(R.id.logoutButton);
-        logoutButton.setOnClickListener(v -> {
-            logoutUser(getActivity());
+        FirestoreRepository firestoreRepository = new FirestoreRepository(getContext());
+        AuthenticationRepository authenticationRepository = new AuthenticationRepository();
+        TextView nameTextView = view.findViewById(R.id.nameText);
+        TextView roleTextView = view.findViewById(R.id.roleText);
+        TextView emailTextView = view.findViewById(R.id.emailText);
+        TextView bloodTypeTextView = view.findViewById(R.id.bloodTypeText);
+
+        firestoreRepository.fetchBloodDonationSiteManagers().observe(getViewLifecycleOwner(), bloodDonationSiteManagers -> {
+                    if (bloodDonationSiteManagers != null) {
+                        for (BloodDonationSiteManager bloodDonationSiteManager : bloodDonationSiteManagers) {
+                            if (bloodDonationSiteManager.getEmail().equals(authenticationRepository.getCurrentUser().getEmail())) {
+                                nameTextView.setText(bloodDonationSiteManager.getUsername());
+                                roleTextView.setText("Blood Donation Site Manager");
+                                emailTextView.setText(bloodDonationSiteManager.getEmail());
+                                bloodTypeTextView.setVisibility(View.GONE);
+                            }
+                        }
+                    }
+                });
+        firestoreRepository.fetchDonors().observe(getViewLifecycleOwner(), donors -> {
+            if (donors != null) {
+                for (Donor donor : donors) {
+                    if (donor.getEmail().equals(authenticationRepository.getCurrentUser().getEmail())) {
+                        nameTextView.setText(donor.getUsername());
+                        roleTextView.setText("Donor");
+                        emailTextView.setText(donor.getEmail());
+                        bloodTypeTextView.setText("Blood Type: " + donor.getBloodType());
+                    }
+                }
+            }
         });
 
+        // Get buttons and set onClickListeners
+        Button aboutUsButton = view.findViewById(R.id.aboutUsButton);
+        Button faqButton = view.findViewById(R.id.faqButton);
+        Button contactUsButton = view.findViewById(R.id.contactUsButton);
+        Button logoutButton = view.findViewById(R.id.logoutButton);
+
+        aboutUsButton.setOnClickListener(v -> navigateToActivity(AboutUsActivity.class));
+        faqButton.setOnClickListener(v -> navigateToActivity(FaqActivity.class));
+        contactUsButton.setOnClickListener(v -> navigateToActivity(ContactUsActivity.class));
+        logoutButton.setOnClickListener(v -> logoutUser(getActivity()));
+
         return view;
+    }
+
+
+    private void navigateToActivity(Class<?> activityClass) {
+        Intent intent = new Intent(getActivity(), activityClass);
+        startActivity(intent);
     }
 
     private void logoutUser(Context context) {

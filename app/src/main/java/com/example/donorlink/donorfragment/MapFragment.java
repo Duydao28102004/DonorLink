@@ -3,6 +3,7 @@ package com.example.donorlink.donorfragment;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -218,21 +219,33 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             selectedMarker = marker;
         }
 
-        displayBottomSheet(site.getName(), site.getAddress());
+        displayBottomSheet(site);
         // Hide the RecyclerView after selection
         searchResultsRecyclerView.setVisibility(View.GONE);
     }
 
-    private void displayBottomSheet(String name, String address) {
-        siteName.setText(name);
-        siteAddress.setText(address);
+    private void displayBottomSheet(DonationSite site) {
+        siteName.setText(site.getName());
+        siteAddress.setText(site.getAddress());
         bottomSheet.setVisibility(View.VISIBLE);
         detailButton.setOnClickListener(v -> {
             // Open the detail page
             Intent intent = new Intent(getContext(), DonationSiteDetailActivity.class);
-            intent.putExtra("name", name);
+            intent.putExtra("name", site.getName());
             startActivity(intent);
         });
+        directionButton.setOnClickListener(v -> {
+            Uri gmmIntentUri = Uri.parse("google.navigation:q=" + site.getLatitude() + "," + site.getLongitude());
+            Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+            mapIntent.setPackage("com.google.android.apps.maps");
+
+            if (mapIntent.resolveActivity(requireContext().getPackageManager()) != null) {
+                startActivity(mapIntent);
+            } else {
+                Toast.makeText(getContext(), "Google Maps not installed", Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
     private void enableMyLocation() {

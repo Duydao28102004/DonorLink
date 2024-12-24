@@ -2,28 +2,23 @@ package com.example.donorlink;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatSpinner;
 import androidx.appcompat.widget.SwitchCompat;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
 import com.example.donorlink.model.BloodDonationSiteManager;
-import com.example.donorlink.model.DonationSite;
 import com.example.donorlink.model.Donor;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class MainActivity extends AppCompatActivity {
     private AuthenticationRepository authRepository;
@@ -176,7 +171,11 @@ public class MainActivity extends AppCompatActivity {
                 public void onSuccess(FirebaseUser user) {
                     showLoading(false);
                     Toast.makeText(MainActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
-                    // Now fetch donor and manager data asynchronously
+
+                    AtomicReference<Boolean> isUser = new AtomicReference<>(false);
+                    AtomicInteger tasksCompleted = new AtomicInteger(0);
+
+                    // Check Donors
                     firestoreRepository.fetchDonors().observe(MainActivity.this, donors -> {
                         if (donors != null) {
                             for (Donor donor : donors) {
@@ -185,12 +184,21 @@ public class MainActivity extends AppCompatActivity {
                                     Intent intent = new Intent(MainActivity.this, DonorActivity.class);
                                     startActivity(intent);
                                     finish();
-                                    return;  // No need to check managers
+                                    isUser.set(true);
+                                    return;
                                 }
                             }
                         }
+
+                        // Increment tasksCompleted and check if both tasks are done
+                        if (tasksCompleted.incrementAndGet() == 2 && !isUser.get()) {
+                            Intent intent = new Intent(MainActivity.this, SuperUserActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
                     });
 
+                    // Check Managers
                     firestoreRepository.fetchBloodDonationSiteManagers().observe(MainActivity.this, managers -> {
                         if (managers != null) {
                             for (BloodDonationSiteManager manager : managers) {
@@ -199,9 +207,17 @@ public class MainActivity extends AppCompatActivity {
                                     Intent intent = new Intent(MainActivity.this, BloodDonationSiteManagerActivity.class);
                                     startActivity(intent);
                                     finish();
-                                    return;  // No need to check donors
+                                    isUser.set(true);
+                                    return;
                                 }
                             }
+                        }
+
+                        // Increment tasksCompleted and check if both tasks are done
+                        if (tasksCompleted.incrementAndGet() == 2 && !isUser.get()) {
+                            Intent intent = new Intent(MainActivity.this, SuperUserActivity.class);
+                            startActivity(intent);
+                            finish();
                         }
                     });
                 }

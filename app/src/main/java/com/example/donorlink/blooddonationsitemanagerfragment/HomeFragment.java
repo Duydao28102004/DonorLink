@@ -164,6 +164,7 @@ public class HomeFragment extends Fragment {
     private void filterData() {
         BloodDonationSiteManager manager = bloodDonationSiteManagerLiveData.getValue();
         List<DonationSite> donationSites = donationSiteLiveData.getValue();
+        TextView noDonationSitesText = getView().findViewById(R.id.noDonationSitesText);
 
         if (manager != null && donationSites != null) {
             List<DonationSite> filteredSites = new ArrayList<>();
@@ -186,6 +187,13 @@ public class HomeFragment extends Fragment {
             }
 
             adapter.updateData(filteredSites);
+
+            // Toggle visibility of the "No donation sites" message
+            if (filteredSites.isEmpty()) {
+                noDonationSitesText.setVisibility(View.VISIBLE);
+            } else {
+                noDonationSitesText.setVisibility(View.GONE);
+            }
         }
     }
 
