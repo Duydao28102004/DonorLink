@@ -1,0 +1,35 @@
+<!-- res/layout/notification_item.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:layout_marginBottom="8dp"
+    android:background="@color/background">
+
+    <!-- Notification Title -->
+    <TextView
+        android:id="@+id/notificationTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Notification Title"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <!-- Notification Message -->
+    <TextView
+        android:id="@+id/notificationMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Notification Message"
+        android:textSize="16sp"
+        android:layout_marginTop="4dp" />
+
+    <!-- Delete Button -->
+    <Button
+        android:id="@+id/btnDelete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Delete"
+        android:layout_marginTop="8dp" />
+</LinearLayout>

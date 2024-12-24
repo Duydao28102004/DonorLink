@@ -9,6 +9,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 
+import com.example.donorlink.blooddonationsitemanagerfragment.ExploreFragment;
 import com.example.donorlink.blooddonationsitemanagerfragment.HomeFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -50,7 +51,7 @@ public class BloodDonationSiteManagerActivity extends AppCompatActivity {
                 selectedFragment = new HomeFragment();
                 selectedFragment.setArguments(args);
             } else if (itemId == R.id.nav_explore) {
-                //selectedFragment = new ExploreFragment();
+                selectedFragment = new ExploreFragment();
             } else if (itemId == R.id.nav_profile) {
                 selectedFragment = new ProfileFragment();
             } else {

@@ -59,6 +59,8 @@ public class AddDonationSiteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_donation_site);
 
+        getSupportActionBar().hide();
+
         // Get the repo instance
         firestoreRepository = new FirestoreRepository(this);
         authenticationRepository = new AuthenticationRepository();

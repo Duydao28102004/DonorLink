@@ -11,10 +11,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.donorlink.DonationSiteAdapter;
 import com.example.donorlink.FirestoreRepository;
+import com.example.donorlink.NotificationActivity;
 import com.example.donorlink.R;
 import com.example.donorlink.model.DonationSite;
 import com.example.donorlink.model.Donor;
@@ -72,10 +75,18 @@ public class HomeFragment extends Fragment {
         TextView donationSite = view.findViewById(R.id.tvDonationSites);
         RecyclerView recyclerView = view.findViewById(R.id.recyclerViewDonationSites);
         TextView seeAllText = view.findViewById(R.id.tvSeeAllDonationSites);
+        androidx.appcompat.widget.SearchView searchView = view.findViewById(R.id.searchView);
+        TextView noDonationSitesText = view.findViewById(R.id.noDonationSitesText);
+        FrameLayout notificationButton = view.findViewById(R.id.notificationButton);
+
+        // open notification activity
+        notificationButton.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), NotificationActivity.class);
+            startActivity(intent);
+        });
 
         // Set up RecyclerView
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
 
 
         // Observe the donorLiveData and update the UI when the donor is set
@@ -97,7 +108,7 @@ public class HomeFragment extends Fragment {
                         int counter = 0;
 
                         // Set up the adapter
-                        DonationSiteAdapter donationSiteAdapter = new DonationSiteAdapter(donationSiteLiveData.getValue(), getContext());
+                        DonationSiteAdapter donationSiteAdapter = new DonationSiteAdapter(donationSites, getContext(), noDonationSitesText);
                         recyclerView.setAdapter(donationSiteAdapter);
 
                         for (DonationSite site : donationSites) {
@@ -114,13 +125,50 @@ public class HomeFragment extends Fragment {
                             donorName.setText("Welcome, " + donor.getUsername());
                             donationSite.setText("You have donated to " + counter + " sites");
                         }
+
+                        searchView.setOnQueryTextListener(new androidx.appcompat.widget.SearchView.OnQueryTextListener() {
+                            @Override
+                            public boolean onQueryTextSubmit(String query) {
+                                // Filter the adapter's list
+                                donationSiteAdapter.filter(query);
+
+                                // Close the keyboard and clear focus
+                                searchView.clearFocus();
+
+                                // Handle visibility of the RecyclerView and the "No results found" message
+                                if (donationSiteAdapter.getItemCount() == 0) {
+                                    recyclerView.setVisibility(View.GONE); // Hide RecyclerView if no results
+                                    noDonationSitesText.setVisibility(View.VISIBLE); // Show "No results found" message
+                                } else {
+                                    recyclerView.setVisibility(View.VISIBLE); // Show RecyclerView if there are results
+                                    noDonationSitesText.setVisibility(View.GONE); // Hide "No results found" message
+                                }
+                                return true; // Indicate the query has been handled
+                            }
+
+                            @Override
+                            public boolean onQueryTextChange(String newText) {
+                                // Filter the adapter's list as user types
+                                donationSiteAdapter.filter(newText);
+
+                                // Handle visibility of the RecyclerView and the "No results found" message
+                                if (donationSiteAdapter.getItemCount() == 0) {
+                                    recyclerView.setVisibility(View.GONE); // Hide RecyclerView if no results
+                                    noDonationSitesText.setVisibility(View.VISIBLE); // Show "No results found" message
+                                } else {
+                                    recyclerView.setVisibility(View.VISIBLE); // Show RecyclerView if there are results
+                                    noDonationSitesText.setVisibility(View.GONE); // Hide "No results found" message
+                                }
+                                return false; // Return false so the query change isn't handled again by `onQueryTextSubmit`
+                            }
+                        });
+
                     }
                 });
             }
         });
 
-
-
         return view;
     }
+
 }

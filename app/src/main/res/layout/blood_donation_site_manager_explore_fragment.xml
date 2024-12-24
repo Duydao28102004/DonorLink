@@ -1,0 +1,21 @@
+<!-- res/layout/fragment_explore.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- SearchView for searching donation sites -->
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/searchView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:queryHint="Search Donation Sites" />
+
+    <!-- RecyclerView to display the donation sites -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewDonationSites"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="16dp"/>
+</LinearLayout>

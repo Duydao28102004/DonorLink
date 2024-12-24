@@ -16,6 +16,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.donorlink.model.DonationSite;
+import com.example.donorlink.model.Donor;
+import com.example.donorlink.model.Notification;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.Places;
@@ -243,6 +245,17 @@ public class UpdateDonationSiteActivity extends AppCompatActivity {
         donationSite.setLatitude(selectedLocation.latitude);
         donationSite.setLongitude(selectedLocation.longitude);
         donationSite.setBloodType(selectedBloodTypes);
+
+        // Send notification for user
+        firestoreRepository.fetchDonors().observe(UpdateDonationSiteActivity.this, donors -> {
+            if (donors != null) {
+                for (Donor donor : donors) {
+                    Notification notification = new Notification("owner of " + donationSite.getName() + " performed some changes", donationSite.getName() + " are update their information, please go to there detail page to check");
+                    donor.getNotificationList().add(notification);
+                    firestoreRepository.updateDonor(donor);
+                }
+            }
+        });
 
         // Save updated site to Firestore
         firestoreRepository.updateDonationSite(donationSite);

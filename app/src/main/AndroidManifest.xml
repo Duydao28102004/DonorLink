@@ -17,6 +17,9 @@
         android:theme="@style/Theme.DonorLink"
         tools:targetApi="31">
         <activity
+            android:name=".NotificationActivity"
+            android:exported="false" />
+        <activity
             android:name=".UpdateDonationSiteActivity"
             android:exported="false" />
         <activity
